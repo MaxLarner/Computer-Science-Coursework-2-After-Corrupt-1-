@@ -85,7 +85,7 @@ namespace Computer_Science_Coursework
             PictureBox pctBox_Temp = new PictureBox();
             //assigns the temporary picturebox as the picturebox created via CreateHold()
             pctBox_CurrentHold = NewHold.CreateHold();
-            NewHold.AddHold(yMouseClick, xMouseClick, pctBox_CurrentHold, WallPanel, HoldCount);
+            NewHold.AddHold(xMouseClick, yMouseClick, pctBox_CurrentHold, WallPanel, HoldCount);
         }
         
         //onclick event and paint event for every button... There must be a better way?? investigate using OOP to solve problem
