@@ -19,11 +19,8 @@ namespace Computer_Science_Coursework
     public partial class Form1 : Form
     {
         int HoldCount = 0;
-        //Bool values to decide which hold has been selected
-        bool Red = false;
-        bool Green = false;
-        bool Blue = false;
         string HoldColour;
+        bool CorrectWallSize = false;
 
         //Defines the wall panel 
         Panel WallPanel = new Panel();
@@ -48,10 +45,15 @@ namespace Computer_Science_Coursework
         {
             int WallWidth = int.Parse(txt_WallWidth.Text);
             int WallHeight = int.Parse(txt_WallHeight.Text);
-
+            CreateWallValidation();
             MessageBox.Show(txt_WallWidth.Text + ", " + txt_WallHeight.Text, "Wall Size");
             //Passes The desired height and Width of the wall to the create wall Function
-            CreateWall(WallWidth, WallHeight);
+
+            if (CorrectWallSize == true)
+                {
+                CreateWall(WallWidth, WallHeight);
+                }
+            
         }
 
         private void CreateWall(int X, int Y)
@@ -67,6 +69,34 @@ namespace Computer_Science_Coursework
             WallPanel.MouseClick+=WallPanel_Click;
             //Adds "WallPanel" to the form
             Controls.Add(WallPanel);
+        }
+
+        private void CreateWallValidation()
+        {
+            int MaxValueHeight = 700;
+            int MinValueHeight = 300;
+            int MaxValueWidth = 400;
+            int MinValueWidth = 150;
+
+            if (int.Parse(txt_WallHeight.Text) > MaxValueHeight || int.Parse(txt_WallWidth.Text) > MaxValueWidth)
+             {
+                MessageBox.Show("this wall is too big! Make sure it's less than 4m Wide and 7m tall");
+                txt_WallWidth.Text = "";
+                txt_WallHeight.Text = "";
+                CorrectWallSize = false;
+             }
+
+            else if (int.Parse(txt_WallHeight.Text) < MinValueHeight || int.Parse(txt_WallWidth.Text) < MinValueWidth)
+            {
+                MessageBox.Show("this wall is too small! Make sure it's more than 1.5m Wide and 3m tall");
+                txt_WallWidth.Text = "";
+                txt_WallHeight.Text = "";
+                CorrectWallSize = false;
+            }
+            else
+            {
+                CorrectWallSize = true;
+            }
         }
 
        
