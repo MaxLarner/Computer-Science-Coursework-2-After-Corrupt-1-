@@ -21,6 +21,7 @@ namespace Computer_Science_Coursework
         int HoldCount = 0;
         string HoldColour;
         bool CorrectWallSize = false;
+        bool PermissionToAddHold = true;
 
         //Defines the wall panel 
         Panel WallPanel = new Panel();
@@ -71,6 +72,22 @@ namespace Computer_Science_Coursework
             Controls.Add(WallPanel);
         }
 
+        private void HoldPlaceValidation()
+        {
+            foreach (PictureBox hold in Controls.OfType<PictureBox>)
+            {
+                if (pctBox_CurrentHold.Bounds.IntersectsWith(hold.Bounds))
+                    {
+                    MessageBox.Show("You Cannot Place Overlapping Holds");
+                    PermissionToAddHold = false; 
+                    }
+                else
+                    {
+                        PermissionToAddHold = true; 
+                    }
+            }
+        }
+
         private void CreateWallValidation()
         {
             int MaxValueHeight = 700;
@@ -115,6 +132,9 @@ namespace Computer_Science_Coursework
             PictureBox pctBox_Temp = new PictureBox();
             //assigns the temporary picturebox as the picturebox created via CreateHold()
             pctBox_CurrentHold = NewHold.CreateHold();
+            //runs the validation of 
+            HoldPlaceValidation();
+
             NewHold.AddHold(xMouseClick, yMouseClick, pctBox_CurrentHold, WallPanel, HoldCount);
         }
         
@@ -176,7 +196,15 @@ namespace Computer_Science_Coursework
             HoldCount++;
             //Adds the hold to the WallPanel
             WallPanel.Controls.Add(pctBox_Hold);
-            pctBox_Hold.Paint += new PaintEventHandler(pctBox_Hold_Paint);
+            if (PermissionToAddHold == true)
+            {
+                pctBox_Hold.Paint += new PaintEventHandler(pctBox_Hold_Paint);
+            }
+            else
+            {
+                Form1.Controls.Remove(pctBox_Hold);
+                pctBox_Hold.Dispose();
+            }
 
 
         }
