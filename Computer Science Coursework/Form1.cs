@@ -96,7 +96,22 @@ namespace Computer_Science_Coursework
             int MaxValueWidth = 400;
             int MinValueWidth = 150;
 
-            if (int.Parse(txt_WallHeight.Text) > MaxValueHeight || int.Parse(txt_WallWidth.Text) > MaxValueWidth)
+            if (!double.TryParse(txt_WallHeight.Text, out result))
+            {
+                MessageBox.Show("Data entered is not a valid number, please try again");
+                txt_WallWidth.Text = "";
+                txt_WallHeight.Text = "";
+                CorrectWallSize = false;
+            }
+            else if (!double.TryParse(txt_WallWidth.Text, out result))
+            {
+                MessageBox.Show("data entered is not a valid number, please try again");
+                txt_WallWidth.Text = "";
+                txt_WallHeight.Text = "";
+                CorrectWallSize = false;
+            }
+
+            else if (int.Parse(txt_WallHeight.Text) > MaxValueHeight || int.Parse(txt_WallWidth.Text) > MaxValueWidth)
              {
                 MessageBox.Show("this wall is too big! Make sure it's less than 4m Wide and 7m tall");
                 txt_WallWidth.Text = "";
