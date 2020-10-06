@@ -77,14 +77,15 @@ namespace Computer_Science_Coursework
             foreach (PictureBox hold in Controls.OfType<PictureBox>)
             {
                 if (pctBox_CurrentHold.Bounds.IntersectsWith(hold.Bounds))
-                    {
+                {
                     MessageBox.Show("You Cannot Place Overlapping Holds");
-                    PermissionToAddHold = false; 
-                    }
+                    PermissionToAddHold = false;
+                }
                 else
-                    {
-                        PermissionToAddHold = true; 
-                    }
+                {
+                    PermissionToAddHold = true;
+
+                }
             }
         }
 
