@@ -74,8 +74,10 @@ namespace Computer_Science_Coursework
 
         private void HoldPlaceValidation()
         {
+            // loops through every picturebox on the webform 
             foreach (PictureBox hold in Controls.OfType<PictureBox>)
             {
+                // checks to see if the hold about to be placed intersects with any other pictureboxes on the form 
                 if (pctBox_CurrentHold.Bounds.IntersectsWith(hold.Bounds))
                 {
                     MessageBox.Show("You Cannot Place Overlapping Holds");
