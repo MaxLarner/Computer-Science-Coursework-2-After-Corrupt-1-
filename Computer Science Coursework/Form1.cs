@@ -1,37 +1,23 @@
-﻿using DocumentFormat.OpenXml.InkML;
-using GemBox.Document.Drawing;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Drawing.Drawing2D;
+using System.Linq;
+using System.Windows.Forms;
 
 
 namespace Computer_Science_Coursework
 {
-    
+
     public partial class Form1 : Form
+
     {
+        
         int HoldCount = 0;
         string HoldColour;
-        bool CorrectWallSize = false;
-        bool PermissionToAddHold = true;
-
         //Defines the wall panel 
-        Panel WallPanel = new Panel();
-        //Defines the picture boxes for each hold "is there a better way to do this? revisit..."
+        Panel WallPanel = Global.WallPanel;
         PictureBox pctBox_CurrentHold = new PictureBox();
-
-        PictureBox pctBox_GreenHold = new PictureBox();
-        PictureBox pctBox_BlueHold = new PictureBox();
-        PictureBox pctBox_RedHold = new PictureBox();
-
         public Form1()
         {
             InitializeComponent();
@@ -44,17 +30,34 @@ namespace Computer_Science_Coursework
 
         private void btn_WallSubmit_Click(object sender, EventArgs e)
         {
-            int WallWidth = int.Parse(txt_WallWidth.Text);
-            int WallHeight = int.Parse(txt_WallHeight.Text);
-            CreateWallValidation();
-            MessageBox.Show(txt_WallWidth.Text + ", " + txt_WallHeight.Text, "Wall Size");
-            //Passes The desired height and Width of the wall to the create wall Function
-
-            if (CorrectWallSize == true)
-                {
+            int WallWidth;
+            int WallHeight;
+           if (CreateWallTextValidation() == true)
+            {
+                WallWidth = int.Parse(txt_WallWidth.Text);
+                WallHeight = int.Parse(txt_WallHeight.Text);
                 CreateWall(WallWidth, WallHeight);
-                }
+                WallPanelSizeTest(WallWidth, WallHeight);
+            }
+           if (CreateWallSizeValidation() == true)
+            {
+                WallWidth = int.Parse(txt_WallWidth.Text);
+                WallHeight = int.Parse(txt_WallHeight.Text);
+                CreateWall(WallWidth, WallHeight);
+                WallPanelSizeTest(WallWidth, WallHeight);
+            }
+
             
+            //Passes The desired height and Width of the wall to the create wall Function
+            
+        }
+
+        private void WallPanelSizeTest(int WallWidth, int WallHeight)
+        {
+            if (WallPanel.Width == WallWidth && WallPanel.Height == WallHeight)
+            {
+                MessageBox.Show("Wall built successfully" + WallWidth + ", " + WallHeight);
+            }
         }
 
         private void CreateWall(int X, int Y)
@@ -72,53 +75,44 @@ namespace Computer_Science_Coursework
             Controls.Add(WallPanel);
         }
 
-        private void HoldPlaceValidation()
+        
+        private bool CreateWallTextValidation()
         {
-            // loops through every picturebox on the webform 
-            foreach (PictureBox hold in Controls.OfType<PictureBox>)
-            {
-                // checks to see if the hold about to be placed intersects with any other pictureboxes on the form 
-                if (pctBox_CurrentHold.Bounds.IntersectsWith(hold.Bounds))
-                {
-                    MessageBox.Show("You Cannot Place Overlapping Holds");
-                    PermissionToAddHold = false;
-                }
-                else
-                {
-                    PermissionToAddHold = true;
+            double Value;
 
-                }
+            if (!double.TryParse(txt_WallHeight.Text, out Value))
+            {
+                MessageBox.Show("Data entered is not a valid number, please try again");
+                txt_WallWidth.Text = "";
+                txt_WallHeight.Text = "";
+                return false;
+            }
+            else if (!double.TryParse(txt_WallWidth.Text, out Value))
+            {
+                MessageBox.Show("data entered is not a valid number, please try again");
+                txt_WallWidth.Text = "";
+                txt_WallHeight.Text = "";
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
-
-        private void CreateWallValidation()
+        private bool CreateWallSizeValidation()
         {
             int MaxValueHeight = 700;
             int MinValueHeight = 300;
             int MaxValueWidth = 400;
             int MinValueWidth = 150;
-
-            if (!double.TryParse(txt_WallHeight.Text, out result))
-            {
-                MessageBox.Show("Data entered is not a valid number, please try again");
-                txt_WallWidth.Text = "";
-                txt_WallHeight.Text = "";
-                CorrectWallSize = false;
-            }
-            else if (!double.TryParse(txt_WallWidth.Text, out result))
-            {
-                MessageBox.Show("data entered is not a valid number, please try again");
-                txt_WallWidth.Text = "";
-                txt_WallHeight.Text = "";
-                CorrectWallSize = false;
-            }
-
-            else if (int.Parse(txt_WallHeight.Text) > MaxValueHeight || int.Parse(txt_WallWidth.Text) > MaxValueWidth)
+            
+            
+            if (int.Parse(txt_WallHeight.Text) > MaxValueHeight || int.Parse(txt_WallWidth.Text) > MaxValueWidth)
              {
                 MessageBox.Show("this wall is too big! Make sure it's less than 4m Wide and 7m tall");
                 txt_WallWidth.Text = "";
                 txt_WallHeight.Text = "";
-                CorrectWallSize = false;
+                return false;
              }
 
             else if (int.Parse(txt_WallHeight.Text) < MinValueHeight || int.Parse(txt_WallWidth.Text) < MinValueWidth)
@@ -126,11 +120,11 @@ namespace Computer_Science_Coursework
                 MessageBox.Show("this wall is too small! Make sure it's more than 1.5m Wide and 3m tall");
                 txt_WallWidth.Text = "";
                 txt_WallHeight.Text = "";
-                CorrectWallSize = false;
+                return false;
             }
             else
             {
-                CorrectWallSize = true;
+                return true;
             }
         }
 
@@ -138,7 +132,6 @@ namespace Computer_Science_Coursework
         // Onclick event for WallPanel
         private void WallPanel_Click(object sender, MouseEventArgs e)
         {
-
             //Creates the name of the new hold 
             string HoldName = "pctBox_Hold" + Convert.ToString(HoldCount);
             //Dectects the X and Y co-ordinates of the click and assigns them to variables
@@ -150,9 +143,6 @@ namespace Computer_Science_Coursework
             PictureBox pctBox_Temp = new PictureBox();
             //assigns the temporary picturebox as the picturebox created via CreateHold()
             pctBox_CurrentHold = NewHold.CreateHold();
-            //runs the validation of 
-            HoldPlaceValidation();
-
             NewHold.AddHold(xMouseClick, yMouseClick, pctBox_CurrentHold, WallPanel, HoldCount);
         }
         
@@ -173,12 +163,12 @@ namespace Computer_Science_Coursework
     /// Creating a class for holds 
     public class Hold
     {
+        //bool PermissionToAddHold;
         PictureBox pctBox_CurrentHold = new PictureBox();
-        public string HoldName;
-        public string HoldColour;
-        public Point[] HoldShape;
-
-
+        string HoldName;
+        string HoldColour;
+        Point[] HoldShape;
+        Panel WallPanel = Global.WallPanel;
         public Hold(string Name, string Colour)
             {
                 HoldName = Name;
@@ -208,30 +198,55 @@ namespace Computer_Science_Coursework
         }
         public void AddHold(int x, int y, PictureBox pctBox_Hold, Panel WallPanel, int HoldCount)
         {
-            //Assigns the location of the picturebox on the wall, position passed in from the WallPanel Click event
-            pctBox_Hold.Location = new Point(x, y);
-            //increases the hold count to make sure the next hold added has a unique name
-            HoldCount++;
-            //Adds the hold to the WallPanel
-            WallPanel.Controls.Add(pctBox_Hold);
-            if (PermissionToAddHold == true)
-            {
-                pctBox_Hold.Paint += new PaintEventHandler(pctBox_Hold_Paint);
-            }
-            else
-            {
-                Form1.Controls.Remove(pctBox_Hold);
-                pctBox_Hold.Dispose();
-            }
-
-
+           // HoldPlaceValidation();
+            
+                //Assigns the location of the picturebox on the wall, position passed in from the WallPanel Click event
+                pctBox_Hold.Location = new Point(x, y);
+                //increases the hold count to make sure the next hold added has a unique name
+                HoldCount++;
+                //Adds the hold to the WallPanel
+                WallPanel.Controls.Add(pctBox_Hold);
+                pctBox_CurrentHold.Paint += new PaintEventHandler(pctBox_Hold_Paint);
+            
         }
 
+        /* public void HoldPlaceValidation()
+        {
+            // loops through every picturebox on the webform 
+            IEnumerable<PictureBox> Holds = WallPanel.Controls.OfType<PictureBox>();
+            // Creates a HitBox around the hold
+            Rectangle rect_CurrentHold = pctBox_CurrentHold.ClientRectangle;
+            pctBox_CurrentHold.Bounds = rect_CurrentHold;
+
+
+            foreach (PictureBox hold in Holds)
+            {
+                Rectangle rect_PlacedHold = hold.ClientRectangle;
+                hold.Bounds = rect_PlacedHold;
+                // checks to see if the hold about to be placed intersects with any other pictureboxes on the form 
+                if (hold == pctBox_CurrentHold)
+                {
+                    //stops from compairing it to itself.
+                    continue;
+                }
+                else
+                {
+                    if (pctBox_CurrentHold.Bounds.IntersectsWith(hold.Bounds))
+                    {
+                        MessageBox.Show("You Cannot Place Overlapping Holds");
+                        PermissionToAddHold = false;
+                    }
+                    else
+                    {
+                        PermissionToAddHold = true;
+                    }
+                }
+            }
+        }
+        */
         public void pctBox_Hold_Paint(object sender, PaintEventArgs e)
         {
             GraphicsPath pctBox_Path = new GraphicsPath();
-
-            
 
             //Select Case for shape based on colours
             switch (HoldColour)
@@ -281,5 +296,11 @@ namespace Computer_Science_Coursework
             //the region of the picturebox is now set to the shape of the graphics path
             pctBox_CurrentHold.Region = new Region(pctBox_Path);
         }
+    }
+
+    //by creating a static class of global variables, i am able to access them interchangably between classes, which is useful as often i need to share pctBox_Current Hold between classes and am unable to pass it via an argument as it would be out of order 
+    public static class Global
+    {
+        public static Panel WallPanel = new Panel();
     }
 }
