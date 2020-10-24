@@ -1,9 +1,5 @@
 ﻿using Computer_Science_Coursework.exceptions;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
 using System.Windows.Forms;
 
 
@@ -13,7 +9,7 @@ namespace Computer_Science_Coursework
     public partial class Form1 : Form
 
     {
-        
+
         public Form1()
         {
             InitializeComponent();
@@ -24,10 +20,10 @@ namespace Computer_Science_Coursework
 
         }
 
-        
+
         //creates an instance of the WallBuild class
         WallBuild WallBuild = new WallBuild();
-   
+
         private void pctBox_GreenHoldButton_Click(object sender, EventArgs e)
         {
             WallBuild.HoldColour = "Green";
@@ -52,35 +48,35 @@ namespace Computer_Science_Coursework
         {
 
 
-            int WallWidth = int.Parse(txt_WallWidth.Text);
-            int WallHeight = int.Parse(txt_WallHeight.Text);
+            string WallWidth = txt_WallWidth.Text;
+            string WallHeight = txt_WallHeight.Text;
 
 
 
             try
             {
-                WallBuild.CreateWallTextValidation(txt_WallHeight.Text, txt_WallWidth.Text);
+                WallBuild.CreateWallTextValidation(WallHeight, WallWidth);
                 WallBuild.CreateWallSizeValidation(txt_WallHeight.Text, txt_WallWidth.Text);
-                WallBuild.CreateWall(WallWidth, WallHeight);
-                WallBuild.WallPanelSizeTest(WallWidth, WallHeight);
+                WallBuild.CreateWall(int.Parse(txt_WallWidth.Text), int.Parse(txt_WallHeight.Text));
+                WallBuild.WallPanelSizeTest(int.Parse(txt_WallWidth.Text), int.Parse(txt_WallHeight.Text));
 
             }
 
-            catch (CreateWall_InvalidTextException ex)
+            catch (CreateWall_InvalidTextException)
             {
                 MessageBox.Show("data entered is not a valid number, please try again");
             }
 
-            catch (CreateWall_InvalidSizeException ex)
+            catch (CreateWall_InvalidSizeException)
             {
                 MessageBox.Show("this wall is too small! Make sure it's more than 1.5m Wide and 3m tall");
             }
-            
 
 
-                //Passes The desired height and Width of the wall to the create wall Function
 
-            
+            //Passes The desired height and Width of the wall to the create wall Function
+
+
         }
     }
 
