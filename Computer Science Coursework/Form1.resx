@@ -61,7 +61,7 @@
   <data name="pctBox_GreenHoldButton.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAEoAAABKCAYAAAAc0MJxAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        wgAADsIBFShKgAAAATZJREFUeF7t1EFqA0EMBdE5eo4wJ80VHHpjQvjBFVpSO1CLt7JnJBXG1/15P/Sa
+        vAAADrwBlbxySQAAATZJREFUeF7t1EFqA0EMBdE5eo4wJ80VHHpjQvjBFVpSO1CLt7JnJBXG1/15P/Sa
         oSBDQYaCDAUZCjIUZCjIUJChIENBhoIMBRkKMhRkKMhQkKEgQ0GGggwFvV2o6+N6Sp+f8jahvgf6KX1/
         2vFQKcxv0vNTjoZKMV5J75lwJFQK8FfpvZ1GQ6WDd6U5HcZCpSOrpHnV2kOlw7qk+VXaQqVDpqR9dpWH
         SoufkHbb0fKLSotPS3vtMBTkfxRkKMhQUFuoJR3RLe1RwVCQoaDWUEs6pkuaX8VQkKGg9lBLOqpamlvJ
@@ -72,7 +72,7 @@
   <data name="pctBox_BlueHoldButton.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAF8AAABeCAYAAABFEMhQAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        wgAADsIBFShKgAAAAdZJREFUeF7t1TFuAkEUBFHuH3FSXwHrB84qYGFmq8fq4GVo+quC5fH8eb7K0fii
+        vAAADrwBlbxySQAAAdZJREFUeF7t1TFuAkEUBFHuH3FSXwHrB84qYGFmq8fq4GVo+quC5fH8eb7K0fii
         xhc1vqjxRY0vanxR44saX9T4osYXNb6o8UWNL2p8UeOLGl/U+KLGFzW+qPFFjS9qfFHjixpf1Piixhc1
         vqjxRY0vanxR44saX9T4oiXxH4+Xim46wb+IP+iudMs+OxTkTnRTuqXffIpyF7on3fI/XApzF7on2fL4
         g8LcgW5JtiX+oDi70R3JtsUfFGg3uiPV1viDAu1EN6TaHn9QpF1oP9Ut8QeF2oX2E90Wf1CoHWg70a3x
@@ -86,7 +86,7 @@
   <data name="pctBox_RedHoldButton.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAEcAAABHCAYAAABVsFofAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        wgAADsIBFShKgAAAATJJREFUeF7t0DGOwzAMBVHfv/JJ9woOWBhw8XeyydKSDEzxOokEZ9t/9kOZcYBx
+        vAAADrwBlbxySQAAATJJREFUeF7t0DGOwzAMBVHfv/JJ9woOWBhw8XeyydKSDEzxOokEZ9t/9kOZcYBx
         gHGAcYBxgHGAcYBxgHGAcYBxgHGAcYBxgHGAcYBxgHGAcYBxgHGAcYBxgHGAcYBxgHHArXGObYvS2xVN
         iXOV/q1iepyrNGOmpeJcpXmjLRvnKs0e4RFxTmnHnR4V55R23eGRcUra1+2xcUra2enWOKd0WJe0r8uQ
         OCUd1iXt6zAsTkmHdUi7OgyNU9Jx/5X2dBge55SO/Faa32FanJIO/Uaa3WFqnJKO/VSa22F6nJIO/kSa
