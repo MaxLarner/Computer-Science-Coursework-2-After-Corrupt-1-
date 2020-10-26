@@ -49,6 +49,7 @@ namespace Computer_Science_Coursework
         }
         public void AddHold(int x, int y, PictureBox pctBox_Hold, Panel WallPanel, int HoldCount)
         {
+            MessageBox.Show("AddHold Function Run");
             // HoldPlaceValidation();
 
             //Assigns the location of the picturebox on the wall, position passed in from the WallPanel Click event
@@ -57,7 +58,9 @@ namespace Computer_Science_Coursework
             HoldCount++;
             //Adds the hold to the WallPanel
             WallPanel.Controls.Add(pctBox_Hold);
+            
             pctBox_CurrentHold.Paint += new PaintEventHandler(pctBox_Hold_Paint);
+            MessageBox.Show("pctBox Paint Event Handled");
 
         }
 
@@ -97,6 +100,7 @@ namespace Computer_Science_Coursework
         */
         public void pctBox_Hold_Paint(object sender, PaintEventArgs e)
         {
+            MessageBox.Show("pctBox hold paint event ");
             GraphicsPath pctBox_Path = new GraphicsPath();
 
             //Select Case for shape based on colours
