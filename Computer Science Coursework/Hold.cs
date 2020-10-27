@@ -9,42 +9,50 @@ namespace Computer_Science_Coursework
 {
     class Hold
     {
+        InputBox InputBox = new InputBox();
+        WallBuild wb;
+        //instantiates an instance of the class save wall 
+        SaveWall SaveWall = new SaveWall();
         //bool PermissionToAddHold;
         PictureBox pctBox_CurrentHold = new PictureBox();
         string HoldName;
-        string HoldColour;
         Point[] HoldShape;
         Panel WallPanel = Global.WallPanel;
-        public Hold(string Name, string Colour)
+        // creates a hold object
+        public Hold(string Name, WallBuild wb)
         {
             HoldName = Name;
-            HoldColour = Colour;
+            //sets wallbuild wb from line 13 to the wall build instance passed into the constructor
+            this.wb = wb;
         }
 
+        
         public PictureBox CreateHold()
         {
-            PictureBox pctBox_Hold = new PictureBox();
-            pctBox_Hold.Name = HoldName;
-            // deciding colour of hold
-            if (HoldColour == "Red")
-            {
-                pctBox_Hold.BackColor = Color.Red;
-            }
-            else if (HoldColour == "Blue")
-            {
-                pctBox_Hold.BackColor = Color.Blue;
-            }
-            else if (HoldColour == "Green")
-            {
-                pctBox_Hold.BackColor = Color.Green;
-            }
-            else
-            {
-                pctBox_Hold.BackColor = Color.Purple;
-            }
+            MessageBox.Show("Create hold function running, value of hold colour is: " + wb.getColour());
+            
+            pctBox_CurrentHold.Name = HoldName;
 
-            pctBox_CurrentHold = pctBox_Hold;
-            return pctBox_Hold;
+            // deciding colour of hold
+            // WallBuild.HoldColour is not setting the HoldColour to the same colour of the button, hence the else if statement was always choosing the purple hold 
+            if (wb.getColour() == "Red")
+            {
+                pctBox_CurrentHold.BackColor = Color.Red;
+            }
+            else if (wb.getColour() == "Blue")
+            {
+                pctBox_CurrentHold.BackColor = Color.Blue;
+            }
+            else if (wb.getColour() == "Green")
+            {
+                pctBox_CurrentHold.BackColor = Color.Green;
+            }
+            else //(WallBuild.HoldColour == "Purple")
+            { 
+                pctBox_CurrentHold.BackColor = Color.Purple;
+            }
+            HoldDropDownMenu();
+            return pctBox_CurrentHold;
 
         }
         public void AddHold(int x, int y, PictureBox pctBox_Hold, Panel WallPanel, int HoldCount)
@@ -53,11 +61,15 @@ namespace Computer_Science_Coursework
             // HoldPlaceValidation();
 
             //Assigns the location of the picturebox on the wall, position passed in from the WallPanel Click event
-            pctBox_Hold.Location = new Point(x, y);
+            pctBox_CurrentHold.Location = new Point(x, y);
             //increases the hold count to make sure the next hold added has a unique name
             HoldCount++;
+
             //Adds the hold to the WallPanel
             WallPanel.Controls.Add(pctBox_Hold);
+            SaveWall SaveWall = new SaveWall();
+            //Adds the Hold to the dictionary with the holds name as the key. 
+            SaveWall.HoldsOnWall(HoldName, pctBox_CurrentHold);
             
             pctBox_CurrentHold.Paint += new PaintEventHandler(pctBox_Hold_Paint);
             MessageBox.Show("pctBox Paint Event Handled");
@@ -101,10 +113,11 @@ namespace Computer_Science_Coursework
         public void pctBox_Hold_Paint(object sender, PaintEventArgs e)
         {
             MessageBox.Show("pctBox hold paint event ");
-            GraphicsPath pctBox_Path = new GraphicsPath();
+            GraphicsPath pctBox_CurrentHold_Path = new GraphicsPath();
+            
 
             //Select Case for shape based on colours
-            switch (HoldColour)
+            switch (wb.getColour())
             {
                 case "Red":
                     Point[] RedShape =
@@ -163,10 +176,66 @@ namespace Computer_Science_Coursework
 
             // Adds the rhombus to the graphics path
 
-            pctBox_Path.AddPolygon(HoldShape);
+            pctBox_CurrentHold_Path.AddPolygon(HoldShape);
 
             //the region of the picturebox is now set to the shape of the graphics path
-            pctBox_CurrentHold.Region = new Region(pctBox_Path);
+            pctBox_CurrentHold.Region = new Region(pctBox_CurrentHold_Path);
+        }
+
+        public void HoldDropDownMenu()
+        {
+
+            ContextMenuStrip HoldDropDownMenu = new ContextMenuStrip();
+
+            ToolStripMenuItem menuEditSize = new ToolStripMenuItem("Edit Size");
+            ToolStripMenuItem menuEditRotation = new ToolStripMenuItem("Edit Rotaion");
+            ToolStripMenuItem menuDeleteHold = new ToolStripMenuItem("Delete Hold");
+            //Assigning event handlers 
+            menuEditSize.Click += new EventHandler(menuEditSize_Click);
+            menuEditRotation.Click += new EventHandler(menuEditRotation_Click);
+            menuDeleteHold.Click += new EventHandler(menuDeleteHold_Click);
+            //Adds the items to the HoldDropDownMenu menu 
+            HoldDropDownMenu.Items.AddRange(new ToolStripItem[] { menuEditSize, menuEditRotation, menuDeleteHold });
+
+            pctBox_CurrentHold.ContextMenuStrip = HoldDropDownMenu;
+
+        }
+
+        private void menuDeleteHold_Click(object sender, EventArgs e)
+        {
+            DeleteHold();
+        }
+
+        private void menuEditRotation_Click(object sender, EventArgs e)
+        {
+            EditHoldRotation();
+        }
+
+        private void menuEditSize_Click(object sender, EventArgs e)
+        {
+            EditHoldsize();
+        }
+        public void EditHoldRotation()
+        {
+           string value = "";
+           if (InputBox.inputBox("Enter the degree of rotation you would like to set to this hold", "Edit Hold Rotation", ref value) == DialogResult.OK)
+            {
+                MessageBox.Show("the input was: " + value);
+            }
+        }
+
+        public void EditHoldsize()
+        {
+            string value = "";
+            if (InputBox.inputBox("Enter how big you would like this hold to be. For comparison, the size of the hold is currently set to 1", "Edit Hold size", ref value) == DialogResult.OK)
+            {
+                MessageBox.Show("the input was: " + value);
+            }
+        }
+
+        public void DeleteHold()
+        {
+            MessageBox.Show("Delete Hold");
         }
     }
 }

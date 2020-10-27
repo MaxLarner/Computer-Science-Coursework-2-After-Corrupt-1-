@@ -12,21 +12,23 @@ namespace Computer_Science_Coursework
 {
     class WallBuild
     {
+
         //instantiate an instance of Form1
 
         // setters and getters 
-        public string holdColour; //feild 
-        public string HoldColour // property
-        {
-            get { return holdColour; }
-            set { holdColour = value; }
-        }
-        public string WallHeight
-        {
-            get { return WallHeight; }
-            set { WallHeight = value; }
-        }
+        public string HoldColour;
 
+        public void setColour(string colour)
+        {
+            this.HoldColour = colour;
+        }
+        
+        public string getColour()
+        {
+            return HoldColour;
+        }
+        
+       
         int HoldCount = 0;
         //Defines the wall panel 
         Panel WallPanel = Global.WallPanel;
@@ -43,7 +45,7 @@ namespace Computer_Science_Coursework
 
         public void CreateWall(int X, int Y)
         {
-            // Create a panel called "WallPanel@
+            // Create a panel called "WallPanel"
             WallPanel.Location = new System.Drawing.Point(300, 50);
             WallPanel.Name = "pnl_ClimbingWall";
             // Assigns the size the dimentions passed to the subroutine...
@@ -75,14 +77,16 @@ namespace Computer_Science_Coursework
         
         public void WallPanel_Click(int X, int Y)
         {
-            MessageBox.Show("Wall Panel Click event done");
+
+            MessageBox.Show("Wall Panel Click event done. The value of the hold colour is: " + HoldColour);
+            
             //Creates the name of the new hold 
             string HoldName = "pctBox_Hold" + Convert.ToString(HoldCount);
             //Dectects the X and Y co-ordinates of the click and assigns them to variables
             int xMouseClick = X;
             int yMouseClick = Y;
-            // Creates an instance of the hold class 
-            Hold NewHold = new Hold(HoldName, HoldColour);
+            // Creates an instance of the hold class, passing itself, the current instance into the hold.
+            Hold NewHold = new Hold(HoldName, this);
             PictureBox pctBox_Temp = new PictureBox();
             //assigns the temporary picturebox as the picturebox created via CreateHold()
             pctBox_CurrentHold = NewHold.CreateHold();
