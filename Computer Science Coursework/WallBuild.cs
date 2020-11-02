@@ -54,7 +54,7 @@ namespace Computer_Science_Coursework
             WallPanel.BackColor = Color.LightGreen;
             ////Dynamically Creates a click event for "WallPanel" to dectect when its been clicked 
             Form1 form = new Form1();
-            WallPanel.MouseClick += form.WallPanel_Click;
+            WallPanel.MouseClick += BuildWallScreen.Instance.WallPanel_Click;
             //Creates a new instance of the event handler 
             CreateWall_AddPanelEventArgs args = new CreateWall_AddPanelEventArgs();
             //Adds the wallpanel to the event 
