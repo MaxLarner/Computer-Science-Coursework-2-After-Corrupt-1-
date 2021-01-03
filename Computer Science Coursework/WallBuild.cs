@@ -6,30 +6,28 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
-using System.Security.Cryptography.X509Certificates;
+
 
 namespace Computer_Science_Coursework
 {
     class WallBuild
     {
 
-        //instantiate an instance of Form1
-
-        // setters and getters 
         public string HoldColour;
 
         public void setColour(string colour)
         {
             this.HoldColour = colour;
         }
-        
+
         public string getColour()
         {
             return HoldColour;
         }
-        
-       
+
+
         int HoldCount = 0;
+        SaveWall sw = new SaveWall();
         //Defines the wall panel 
         Panel WallPanel = Global.WallPanel;
         PictureBox pctBox_CurrentHold = new PictureBox();
@@ -87,11 +85,11 @@ namespace Computer_Science_Coursework
             int yMouseClick = Y;
             // Creates an instance of the hold class, passing itself, the current instance into the hold.
             Hold NewHold = new Hold(HoldName, this);
-            PictureBox pctBox_Temp = new PictureBox();
             //assigns the temporary picturebox as the picturebox created via CreateHold()
             pctBox_CurrentHold = NewHold.CreateHold();
             MessageBox.Show("about to run addhold function");
             NewHold.AddHold(xMouseClick, yMouseClick, pctBox_CurrentHold, WallPanel, HoldCount);
+            
         }
 
         public void CreateWallTextValidation(string WallHeight, string WallWidth)

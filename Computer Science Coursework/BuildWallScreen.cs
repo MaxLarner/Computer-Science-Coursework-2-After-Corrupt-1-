@@ -25,40 +25,76 @@ namespace Computer_Science_Coursework
                 return _instance; 
             }
         }
+        int PanelWidth;
+        bool HidePanel;
         public BuildWallScreen()
         {
             InitializeComponent();
+            PanelWidth = pnl_SlideOutWallBuild.Width;
+            HidePanel = false;
+        }
+        private void btn_DimensionsSlideButton_Click(object sender, EventArgs e)
+        {
+            timer1.Start();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (HidePanel)
+            {
+                pnl_SlideOutWallBuild.Width = pnl_SlideOutWallBuild.Width + 20;
+
+                if (pnl_SlideOutWallBuild.Width >= PanelWidth)
+                {
+                    timer1.Stop();
+                    HidePanel = false;
+                    this.Refresh();
+                }
+
+                else
+                {
+                    pnl_SlideOutWallBuild.Width = pnl_SlideOutWallBuild.Width - 20;
+
+                    if (pnl_SlideOutWallBuild.Width <= 0)
+                    {
+                        timer1.Stop();
+                        HidePanel = true;
+                        this.Refresh();
+                    }
+                }
+            }
+
         }
 
         private void BuildWallScreen_Load(object sender, EventArgs e)
         {
 
         }
-
+        
         private void pctBox_GreenHoldButton_Click(object sender, EventArgs e)
         {
             wb.setColour("Green");
-            MessageBox.Show("button clicked, HoldColour value set to: " + wb.getColour());
+            
         }
 
         private void pctBox_BlueHoldButton_Click(object sender, EventArgs e)
         {
             wb.setColour("Blue");
-            MessageBox.Show("button clicked, HoldColour value set to: " + wb.getColour());
+            
         }
 
         private void pctBox_RedHoldButton_Click(object sender, EventArgs e)
         {
 
             wb.setColour("Red");
-            MessageBox.Show("button clicked, HoldColour value set to: " + wb.getColour());
+            
         }
 
         private void pctBox_PurpleHoldButton_Click(object sender, EventArgs e)
         {
             wb.setColour("Purple");
 
-            MessageBox.Show("button clicked, HoldColour value set to: " + wb.getColour());
+            
         }
 
         private void btn_WallSubmit_Click(object sender, EventArgs e)
@@ -107,5 +143,7 @@ namespace Computer_Science_Coursework
             MessageBox.Show("wall panel clicked");
             wb.WallPanel_Click(e.X, e.Y);
         }
+
+        
     }
 }

@@ -12,16 +12,20 @@ namespace Computer_Science_Coursework
         InputBox InputBox = new InputBox();
         WallBuild wb;
         //instantiates an instance of the class save wall 
-        SaveWall SaveWall = new SaveWall();
+        SaveWall sw = new SaveWall();
         //bool PermissionToAddHold;
         PictureBox pctBox_CurrentHold = new PictureBox();
         string HoldName;
         Point[] HoldShape;
+        bool Rotated = false;
         Panel WallPanel = Global.WallPanel;
+
+       
+        
         // creates a hold object
         public Hold(string Name, WallBuild wb)
         {
-            HoldName = Name;
+            this.HoldName = Name;
             //sets wallbuild wb from line 13 to the wall build instance passed into the constructor
             this.wb = wb;
         }
@@ -29,7 +33,7 @@ namespace Computer_Science_Coursework
         
         public PictureBox CreateHold()
         {
-            MessageBox.Show("Create hold function running, value of hold colour is: " + wb.getColour());
+           
             
             pctBox_CurrentHold.Name = HoldName;
 
@@ -57,8 +61,7 @@ namespace Computer_Science_Coursework
         }
         public void AddHold(int x, int y, PictureBox pctBox_Hold, Panel WallPanel, int HoldCount)
         {
-            MessageBox.Show("AddHold Function Run");
-            // HoldPlaceValidation();
+            
 
             //Assigns the location of the picturebox on the wall, position passed in from the WallPanel Click event
             pctBox_CurrentHold.Location = new Point(x, y);
@@ -68,9 +71,6 @@ namespace Computer_Science_Coursework
             //Adds the hold to the WallPanel
             WallPanel.Controls.Add(pctBox_Hold);
             SaveWall SaveWall = new SaveWall();
-            //Adds the Hold to the dictionary with the holds name as the key. 
-            SaveWall.HoldsOnWall(HoldName, pctBox_CurrentHold);
-            
             pctBox_CurrentHold.Paint += new PaintEventHandler(pctBox_Hold_Paint);
             MessageBox.Show("pctBox Paint Event Handled");
 
@@ -110,42 +110,42 @@ namespace Computer_Science_Coursework
             }
         }
         */
-        public void pctBox_Hold_Paint(object sender, PaintEventArgs e)
-        {
-            MessageBox.Show("pctBox hold paint event ");
-            GraphicsPath pctBox_CurrentHold_Path = new GraphicsPath();
-            
 
-            //Select Case for shape based on colours
-            switch (wb.getColour())
+        public void SetHoldShape()
+        {
+            if (Rotated != true)
             {
-                case "Red":
-                    Point[] RedShape =
-                    {
+
+                //Select Case for shape based on colours
+                switch (wb.getColour())
+                {
+                    case "Red":
+                        Point[] RedShape =
+                        {
                     new Point(-23, -10),
                     new Point(20, 5),
                     new Point(26, 10),
                     new Point(25, 20),
                     new Point(15, 20)
                     };
-                    HoldShape = RedShape;
-                    break;
+                        HoldShape = RedShape;
+                        break;
 
-                case "Blue":
-                    Point[] BlueShape =
-                    {
+                    case "Blue":
+                        Point[] BlueShape =
+                        {
                     new Point(-2, 12),
                     new Point(32, 13),
                     new Point(41, 40),
                     new Point(61, 41),
                     new Point(32, 46)
                     };
-                    HoldShape = BlueShape;
-                    break;
+                        HoldShape = BlueShape;
+                        break;
 
-                case "Purple":
-                    Point[] PurpleShape =
-                    {
+                    case "Purple":
+                        Point[] PurpleShape =
+                        {
                         new Point(-70, 80),
                         new Point(-30, 60),
                         new Point(70, 80),
@@ -157,29 +157,35 @@ namespace Computer_Science_Coursework
                         new Point(-80, 70),
                         new Point(-70, 80)
                     };
-                    HoldShape = PurpleShape;
-                    break;
+                        HoldShape = PurpleShape;
+                        break;
 
-                default:
-                    // Default case.
-                    Point[] GreenShape =
-                    {
+                    default:
+                        // Default case.
+                        Point[] GreenShape =
+                        {
                     new Point(23, 20),
                     new Point(40, 10),
                     new Point(57, 20),
                     new Point(50, 40),
                     new Point(30, 40)
                     };
-                    HoldShape = GreenShape;
-                    break;
+                        HoldShape = GreenShape;
+                        break;
+                }
             }
 
+        }
+        public void pctBox_Hold_Paint(object sender, PaintEventArgs e)
+        {
+            
+            GraphicsPath pctBox_CurrentHold_Path = new GraphicsPath();
+            SetHoldShape();
             // Adds the rhombus to the graphics path
-
             pctBox_CurrentHold_Path.AddPolygon(HoldShape);
-
             //the region of the picturebox is now set to the shape of the graphics path
             pctBox_CurrentHold.Region = new Region(pctBox_CurrentHold_Path);
+            
         }
 
         public void HoldDropDownMenu()
@@ -217,11 +223,44 @@ namespace Computer_Science_Coursework
         }
         public void EditHoldRotation()
         {
+            
            string value = "";
            if (InputBox.inputBox("Enter the degree of rotation you would like to set to this hold", "Edit Hold Rotation", ref value) == DialogResult.OK)
             {
-                MessageBox.Show("the input was: " + value);
+               double AngleOfRotation = Convert.ToInt32(value);
+               this.HoldShape = RotateHold(AngleOfRotation); 
             }
+            //repaints the hold object
+            this.pctBox_CurrentHold.Paint += new PaintEventHandler(pctBox_Hold_Paint);
+
+        }
+
+        public Point[] RotateHold(double angleInDegrees)
+        {
+            //Allows the repaint method to know to use the new rotated shape
+            Rotated = true; 
+            //Creates a list as you cannot have an array of an unknown length in c#
+            List<Point> RotatedHoldShapeList = new List<Point>();
+            Point centerPoint = this.pctBox_CurrentHold.Location;
+            double angleInRadians = angleInDegrees * (Math.PI / 180);
+            double cosTheta = Math.Cos(angleInRadians);
+            double sinTheta = Math.Sin(angleInRadians);
+
+            foreach (Point p in HoldShape)
+            {
+                //replaces the holdshape so it can be repainted 
+                RotatedHoldShapeList.Add(new Point
+                {
+                    X = (int)(cosTheta * (p.X - centerPoint.X) - sinTheta * (p.Y - centerPoint.Y) + centerPoint.X),
+                    Y = (int)(sinTheta * (p.X - centerPoint.X) + cosTheta * (p.Y - centerPoint.Y) + centerPoint.Y)
+                }
+                );
+            }
+            //Converts the list to an Array 
+            Point[] RotatedHoldShape = RotatedHoldShapeList.ToArray();
+            return RotatedHoldShape;
+
+            
         }
 
         public void EditHoldsize()
