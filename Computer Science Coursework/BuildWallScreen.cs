@@ -30,46 +30,10 @@ namespace Computer_Science_Coursework
         public BuildWallScreen()
         {
             InitializeComponent();
-            PanelWidth = pnl_SlideOutWallBuild.Width;
-            HidePanel = false;
-        }
-        private void btn_DimensionsSlideButton_Click(object sender, EventArgs e)
-        {
-            timer1.Start();
+            
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            if (HidePanel)
-            {
-                pnl_SlideOutWallBuild.Width = pnl_SlideOutWallBuild.Width + 20;
-
-                if (pnl_SlideOutWallBuild.Width >= PanelWidth)
-                {
-                    timer1.Stop();
-                    HidePanel = false;
-                    this.Refresh();
-                }
-
-                else
-                {
-                    pnl_SlideOutWallBuild.Width = pnl_SlideOutWallBuild.Width - 20;
-
-                    if (pnl_SlideOutWallBuild.Width <= 0)
-                    {
-                        timer1.Stop();
-                        HidePanel = true;
-                        this.Refresh();
-                    }
-                }
-            }
-
-        }
-
-        private void BuildWallScreen_Load(object sender, EventArgs e)
-        {
-
-        }
+     
         
         private void pctBox_GreenHoldButton_Click(object sender, EventArgs e)
         {
@@ -144,6 +108,9 @@ namespace Computer_Science_Coursework
             wb.WallPanel_Click(e.X, e.Y);
         }
 
-        
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

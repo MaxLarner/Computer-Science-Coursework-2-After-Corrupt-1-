@@ -17,7 +17,7 @@ namespace Computer_Science_Coursework
         PictureBox pctBox_CurrentHold = new PictureBox();
         string HoldName;
         Point[] HoldShape;
-        bool Rotated = false;
+        bool Edited = false;
         Panel WallPanel = Global.WallPanel;
 
        
@@ -113,7 +113,7 @@ namespace Computer_Science_Coursework
 
         public void SetHoldShape()
         {
-            if (Rotated != true)
+            if (Edited == false)
             {
 
                 //Select Case for shape based on colours
@@ -146,16 +146,19 @@ namespace Computer_Science_Coursework
                     case "Purple":
                         Point[] PurpleShape =
                         {
-                        new Point(-70, 80),
-                        new Point(-30, 60),
-                        new Point(70, 80),
-                        new Point(80, 70),
-                        new Point(40, 30),
-                        new Point(60, -40),
-                        new Point(50, -50),
-                        new Point(-40, 20),
-                        new Point(-80, 70),
-                        new Point(-70, 80)
+                        new Point(-30, 20),
+                        new Point(-24, 24),
+                        new Point(0, 20),
+                        new Point(24, 24),
+                        new Point(30, 20),
+                        new Point(20, 0),
+                        new Point(30, -20),
+                        new Point(24, -24),
+                        new Point(0, -20),
+                        new Point(-24, -24),
+                        new Point(-30, -20),
+                        new Point(-20, 0),
+                        new Point(-30, 20)
                     };
                         HoldShape = PurpleShape;
                         break;
@@ -173,6 +176,8 @@ namespace Computer_Science_Coursework
                         HoldShape = GreenShape;
                         break;
                 }
+
+                Edited = false; 
             }
 
         }
@@ -181,7 +186,7 @@ namespace Computer_Science_Coursework
             
             GraphicsPath pctBox_CurrentHold_Path = new GraphicsPath();
             SetHoldShape();
-            // Adds the rhombus to the graphics path
+            // Adds the polygon to the graphics path
             pctBox_CurrentHold_Path.AddPolygon(HoldShape);
             //the region of the picturebox is now set to the shape of the graphics path
             pctBox_CurrentHold.Region = new Region(pctBox_CurrentHold_Path);
@@ -228,20 +233,22 @@ namespace Computer_Science_Coursework
            if (InputBox.inputBox("Enter the degree of rotation you would like to set to this hold", "Edit Hold Rotation", ref value) == DialogResult.OK)
             {
                double AngleOfRotation = Convert.ToInt32(value);
-               this.HoldShape = RotateHold(AngleOfRotation); 
+                HoldShape = RotateHold(AngleOfRotation);
+
             }
             //repaints the hold object
-            this.pctBox_CurrentHold.Paint += new PaintEventHandler(pctBox_Hold_Paint);
+            pctBox_CurrentHold.Refresh();
+           
 
         }
 
         public Point[] RotateHold(double angleInDegrees)
         {
             //Allows the repaint method to know to use the new rotated shape
-            Rotated = true; 
+            Edited = true; 
             //Creates a list as you cannot have an array of an unknown length in c#
             List<Point> RotatedHoldShapeList = new List<Point>();
-            Point centerPoint = this.pctBox_CurrentHold.Location;
+            Point centerPoint = new Point { X = (pctBox_CurrentHold.Width / 2), Y = (pctBox_CurrentHold.Height / 2) };
             double angleInRadians = angleInDegrees * (Math.PI / 180);
             double cosTheta = Math.Cos(angleInRadians);
             double sinTheta = Math.Sin(angleInRadians);
@@ -265,11 +272,35 @@ namespace Computer_Science_Coursework
 
         public void EditHoldsize()
         {
+
             string value = "";
             if (InputBox.inputBox("Enter how big you would like this hold to be. For comparison, the size of the hold is currently set to 1", "Edit Hold size", ref value) == DialogResult.OK)
             {
-                MessageBox.Show("the input was: " + value);
+                double SizeOfChange = Convert.ToInt32(value);
+                HoldShape = ChangeHoldSize(SizeOfChange);
             }
+            pctBox_CurrentHold.Refresh();
+        }
+
+        public Point[] ChangeHoldSize(double SizeOfChange)
+        {
+            Edited = true; 
+            List<Point> RotatedHoldShapeList = new List<Point>();
+
+            foreach (Point p in HoldShape)
+            {
+                //replaces the holdshape so it can be repainted 
+                RotatedHoldShapeList.Add(new Point
+                {
+                    X = (int)(p.X * SizeOfChange),
+                    Y = (int)(p.Y * SizeOfChange)
+                }
+                );
+
+            }
+            Point[] RotatedHoldShape = RotatedHoldShapeList.ToArray();
+            return RotatedHoldShape;
+
         }
 
         public void DeleteHold()
