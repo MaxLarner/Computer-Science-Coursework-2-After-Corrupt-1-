@@ -96,22 +96,32 @@ namespace Computer_Science_Coursework
         {
             
             double Value;
+            // if the string entry cannot be parsed into a double value and isn't empty, an error saying that the text entered is not an integer 
+            if (!double.TryParse(WallHeight, out Value) && !string.IsNullOrEmpty(WallHeight))
+            {
+                //resets the entry boxes to show nothing, prompting another user entry 
+                WallWidth = "";
+                WallHeight = "";
+                //exception is thrown to be caught in wallbuild user control
+                throw new CreateWall_InvalidTextException();
+            }
+            else if (!double.TryParse(WallWidth, out Value) && !string.IsNullOrEmpty(WallWidth))
+            {
+                
+                WallWidth = "";
+                WallHeight = "";
+                //exception thrown to be caught in wall build user control
+                throw new CreateWall_InvalidTextException();
+            }
+            else if (string.IsNullOrEmpty(WallHeight))
+            {// exception to be caught in wall builder user control 
+                throw new CreateWall_InvalidPresenceCheck();
+            }
+            else if (string.IsNullOrEmpty(WallWidth))
+            {
+                throw new CreateWall_InvalidPresenceCheck();
+            }
 
-            if (!double.TryParse(WallHeight, out Value))
-            {
-                
-                WallWidth = "";
-                WallHeight = "";
-                throw new CreateWall_InvalidTextException();
-            }
-            else if (!double.TryParse(WallWidth, out Value))
-            {
-                
-                WallWidth = "";
-                WallHeight = "";
-                throw new CreateWall_InvalidTextException();
-            }
-            
         }
         public void CreateWallSizeValidation(string WallHeight, string WallWidth)
         { 
@@ -126,7 +136,7 @@ namespace Computer_Science_Coursework
                
                 WallWidth = "";
                 WallHeight = "";
-                throw new CreateWall_InvalidTextException();
+                throw new CreateWall_InvalidSizeException();
             }
 
             else if (int.Parse(WallHeight) < MinValueHeight || int.Parse(WallWidth) < MinValueWidth)

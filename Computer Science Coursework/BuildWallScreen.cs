@@ -25,6 +25,22 @@ namespace Computer_Science_Coursework
                 return _instance; 
             }
         }
+        Panel pnl_Screen = Application.OpenForms["Form1"].Controls["pnl_Screen"] as Panel;
+        private void btn_ReturnHome_Click(object sender, EventArgs e)
+        {
+            if (!pnl_Screen.Controls.Contains(SelectionScreen.Instance))
+            {
+                pnl_Screen.Controls.Add(SelectionScreen.Instance);
+                SelectionScreen.Instance.Dock = DockStyle.Fill;
+                SelectionScreen.Instance.BringToFront();
+            }
+            else
+            {
+                SelectionScreen.Instance.BringToFront();
+            }
+
+        }
+
         int PanelWidth;
         bool HidePanel;
         public BuildWallScreen()
@@ -33,27 +49,27 @@ namespace Computer_Science_Coursework
             
         }
 
-     
-        
+
+        //sets wb.set colour to green on button click 
         private void pctBox_GreenHoldButton_Click(object sender, EventArgs e)
         {
             wb.setColour("Green");
             
         }
-
+        //sets wb.set colour to blue on button click 
         private void pctBox_BlueHoldButton_Click(object sender, EventArgs e)
         {
             wb.setColour("Blue");
             
         }
-
+        //sets wb.set colour to red on button click 
         private void pctBox_RedHoldButton_Click(object sender, EventArgs e)
         {
 
             wb.setColour("Red");
             
         }
-
+        //sets wb.set colour to pruple on button click 
         private void pctBox_PurpleHoldButton_Click(object sender, EventArgs e)
         {
             wb.setColour("Purple");
@@ -68,7 +84,7 @@ namespace Computer_Science_Coursework
 
             try
             {
-
+                //Validates the input using functions from instantiated Wallbuild
                 wb.CreateWallTextValidation(WallHeight, WallWidth);
                 wb.CreateWallSizeValidation(txt_WallHeight.Text, txt_WallWidth.Text);
                 wb.CreateWallEventHandler += WallBuild_CreateWallEventHandler;
@@ -77,20 +93,24 @@ namespace Computer_Science_Coursework
                 wb.WallPanelSizeTest(int.Parse(txt_WallWidth.Text), int.Parse(txt_WallHeight.Text));
 
             }
-
+            //Catches errors thrown up from the validation functions in wall build
             catch (CreateWall_InvalidTextException)
             {
-                MessageBox.Show("data entered is not a valid number, please try again");
+                MessageBox.Show("data entered is not a valid , please try again");
             }
 
             catch (CreateWall_InvalidSizeException)
             {
-                MessageBox.Show("this wall is too small! Make sure it's more than 1.5m Wide and 3m tall");
+                MessageBox.Show("This wall size is out of bounds. Make sure it's more than 1.5m Wide and 3m tall, but less than 4m wide and 7m Tall");
             }
 
             catch (CreateWall_PanelTest)
             {
                 MessageBox.Show("there was an error when creating the wall panel");
+            }
+            catch(CreateWall_InvalidPresenceCheck)
+            {
+                MessageBox.Show("Not all fields have been filled. Please enter a height and width (cm)");
             }
         }
 
@@ -108,9 +128,8 @@ namespace Computer_Science_Coursework
             wb.WallPanel_Click(e.X, e.Y);
         }
 
-        private void label3_Click(object sender, EventArgs e)
-        {
+      
 
-        }
+        
     }
 }

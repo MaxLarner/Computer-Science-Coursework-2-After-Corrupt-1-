@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Computer_Science_Coursework.exceptions;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -19,12 +20,16 @@ namespace Computer_Science_Coursework
         Point[] HoldShape;
         bool Edited = false;
         Panel WallPanel = Global.WallPanel;
+        bool startHold;
+        bool finishHold; 
 
        
         
         // creates a hold object
         public Hold(string Name, WallBuild wb)
         {
+            this.startHold = false;
+            this.finishHold = false;
             this.HoldName = Name;
             //sets wallbuild wb from line 13 to the wall build instance passed into the constructor
             this.wb = wb;
@@ -146,19 +151,12 @@ namespace Computer_Science_Coursework
                     case "Purple":
                         Point[] PurpleShape =
                         {
-                        new Point(-30, 20),
-                        new Point(-24, 24),
-                        new Point(0, 20),
-                        new Point(24, 24),
-                        new Point(30, 20),
-                        new Point(20, 0),
-                        new Point(30, -20),
-                        new Point(24, -24),
-                        new Point(0, -20),
-                        new Point(-24, -24),
-                        new Point(-30, -20),
-                        new Point(-20, 0),
-                        new Point(-30, 20)
+                        new Point(-30, -30),
+                        new Point(-30, 30),
+                        new Point(30, 30),
+                        new Point(30, -30)
+                       
+                        
                     };
                         HoldShape = PurpleShape;
                         break;
@@ -195,18 +193,24 @@ namespace Computer_Science_Coursework
 
         public void HoldDropDownMenu()
         {
-
+            //this creates a new contextmenu strip 
             ContextMenuStrip HoldDropDownMenu = new ContextMenuStrip();
 
+            //creating new items to go in the context menu, each one is its own 'button'
             ToolStripMenuItem menuEditSize = new ToolStripMenuItem("Edit Size");
             ToolStripMenuItem menuEditRotation = new ToolStripMenuItem("Edit Rotaion");
             ToolStripMenuItem menuDeleteHold = new ToolStripMenuItem("Delete Hold");
+            ToolStripMenuItem menuSetStart = new ToolStripMenuItem("Set Start");
+            ToolStripMenuItem menuSetFinish = new ToolStripMenuItem("Set Finish");
+
             //Assigning event handlers 
             menuEditSize.Click += new EventHandler(menuEditSize_Click);
             menuEditRotation.Click += new EventHandler(menuEditRotation_Click);
             menuDeleteHold.Click += new EventHandler(menuDeleteHold_Click);
+            menuSetStart.Click += new EventHandler(menuSetStart_Click);
+            menuSetFinish.Click += new EventHandler(menuSetFinish_Click);
             //Adds the items to the HoldDropDownMenu menu 
-            HoldDropDownMenu.Items.AddRange(new ToolStripItem[] { menuEditSize, menuEditRotation, menuDeleteHold });
+            HoldDropDownMenu.Items.AddRange(new ToolStripItem[] { menuEditSize, menuEditRotation, menuDeleteHold, menuSetStart, menuSetFinish });
 
             pctBox_CurrentHold.ContextMenuStrip = HoldDropDownMenu;
 
@@ -228,20 +232,71 @@ namespace Computer_Science_Coursework
         }
         public void EditHoldRotation()
         {
-            
-           string value = "";
-           if (InputBox.inputBox("Enter the degree of rotation you would like to set to this hold", "Edit Hold Rotation", ref value) == DialogResult.OK)
+            try
             {
-               double AngleOfRotation = Convert.ToInt32(value);
-                HoldShape = RotateHold(AngleOfRotation);
+                string value = "";
+                if (InputBox.inputBox("Enter the degree of rotation you would like to set to this hold", "Edit Hold Rotation", ref value) == DialogResult.OK)
+                {
+                    double Value;
 
+
+                    if (!double.TryParse(value, out Value) && !string.IsNullOrEmpty(value))
+                    {
+                        throw new Hold_InvalidNonIntegerEntry();
+                    }
+                    else if (string.IsNullOrEmpty(value))
+                    {
+                        throw new Hold_InvalidPresenceCheck();
+                    }
+                    double AngleOfRotation = Convert.ToInt32(value);
+                    HoldShape = RotateHold(AngleOfRotation);
+
+                }
+                //repaints the hold object
+                pctBox_CurrentHold.Refresh();
             }
-            //repaints the hold object
-            pctBox_CurrentHold.Refresh();
-           
+            catch (Hold_InvalidNonIntegerEntry)
+            {
+                MessageBox.Show("please only enter integers");
+            }
+            catch (Hold_InvalidPresenceCheck)
+            {
+                MessageBox.Show("Please enter an integer value");
+            }
 
         }
 
+
+        private void menuSetStart_Click(object sender, EventArgs e)
+        {
+            if  (this.startHold == true)
+            {
+                MessageBox.Show("Start Hold Toggled Off");
+                this.startHold = false; 
+            }
+            else
+            {
+                MessageBox.Show("Start Hold Toggled On ");
+               this.startHold = true;  
+            } 
+        }
+
+        private void menuSetFinish_Click(object sender, EventArgs e)
+        {
+            if (this.finishHold == true)
+            {
+                MessageBox.Show("finish Hold Toggled Off");
+                this.finishHold = false;
+            }
+            else
+            {
+                MessageBox.Show("Start Hold Toggled On ");
+                this.finishHold = true;
+            }
+
+        }
+
+       
         public Point[] RotateHold(double angleInDegrees)
         {
             //Allows the repaint method to know to use the new rotated shape
@@ -269,17 +324,39 @@ namespace Computer_Science_Coursework
 
             
         }
+    
 
         public void EditHoldsize()
         {
-
-            string value = "";
-            if (InputBox.inputBox("Enter how big you would like this hold to be. For comparison, the size of the hold is currently set to 1", "Edit Hold size", ref value) == DialogResult.OK)
+            double Value;
+            try
             {
-                double SizeOfChange = Convert.ToInt32(value);
-                HoldShape = ChangeHoldSize(SizeOfChange);
+                string value = "";
+                if (InputBox.inputBox("Enter how big you would like this hold to be. For comparison, the size of the hold is currently set to 1", "Edit Hold size", ref value) == DialogResult.OK)
+                {
+                    if (!double.TryParse(value, out Value) && !string.IsNullOrEmpty(value))
+                    {
+                        throw new Hold_InvalidNonIntegerEntry();
+                    }
+                    else if (string.IsNullOrEmpty(value))
+                    {
+                        throw new Hold_InvalidPresenceCheck();
+                    }
+                    double SizeOfChange = Convert.ToDouble(value);
+                    HoldShape = ChangeHoldSize(SizeOfChange);
+
+                }
+                //repaints the hold object
+                pctBox_CurrentHold.Refresh();
             }
-            pctBox_CurrentHold.Refresh();
+            catch (Hold_InvalidNonIntegerEntry)
+            {
+                MessageBox.Show("please only enter integers");
+            }
+            catch (Hold_InvalidPresenceCheck)
+            {
+                MessageBox.Show("Please enter an integer value, Feild currently is empty");
+            }
         }
 
         public Point[] ChangeHoldSize(double SizeOfChange)
@@ -305,7 +382,8 @@ namespace Computer_Science_Coursework
 
         public void DeleteHold()
         {
-            MessageBox.Show("Delete Hold");
+            this.pctBox_CurrentHold.Dispose();
+            
         }
     }
 }

@@ -35,8 +35,8 @@ namespace Computer_Science_Coursework
 
         private void btn_BuildWall_Click(object sender, EventArgs e)
         {
-            
-            if(!pnl_Screen.Controls.Contains(BuildWallScreen.Instance))
+
+            if (!pnl_Screen.Controls.Contains(BuildWallScreen.Instance))
             {
                 pnl_Screen.Controls.Add(BuildWallScreen.Instance);
                 BuildWallScreen.Instance.Dock = DockStyle.Fill;

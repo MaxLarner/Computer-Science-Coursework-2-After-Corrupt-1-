@@ -58,6 +58,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing.Common" name="System.Drawing.Common, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51" />
+  <data name="pctBox_PurpleHoldButton.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAFkAAABNCAYAAADNTMgiAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wQAADsEBuJFr7QAAAM5JREFUeF7t0DERwCAAwECkIwGltUANdCUM/eH3XMZ61uYskwMmB0wOmBwwOWBy
+        wOSAyQGTAyYHTA6YHDA5YHLA5IDJAZMDJgdMDpgcuDJ5jnnFV0vB5IDJAZMDJgdMDpgcMDlgcsDkgMkB
+        kwMmB0wOmBwwOWBywOSAyQGTAyYHTA6YHDA5YHLA5IDJAZMDJgdMDlyZ/DcmB0wOmBwwOWBywOSAyQGT
+        AyYHTA6YHDA5YHLA5IDJAZMDJgdMDpgcMDlgcsDkgMkBkwMmH7f2C3tk+k1lMIQmAAAAAElFTkSuQmCC
+</value>
+  </data>
   <data name="pctBox_GreenHoldButton.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAH8AAAB2CAYAAADhskzbAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
