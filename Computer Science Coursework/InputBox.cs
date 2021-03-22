@@ -4,6 +4,7 @@ using System;
 
 namespace Computer_Science_Coursework
 {
+    [Serializable()]
     class InputBox
     {
         public static DialogResult inputBox(string title, string promptText, ref string value)

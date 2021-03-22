@@ -35,7 +35,7 @@
             this.pctBox_GreenHoldButton = new System.Windows.Forms.PictureBox();
             this.pctBox_BlueHoldButton = new System.Windows.Forms.PictureBox();
             this.pctBox_RedHoldButton = new System.Windows.Forms.PictureBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btn_WallSubmit = new System.Windows.Forms.Button();
             this.txt_WallWidth = new System.Windows.Forms.TextBox();
             this.txt_WallHeight = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -71,6 +71,8 @@
             // pctBox_PurpleHoldButton
             // 
             this.pctBox_PurpleHoldButton.BackColor = System.Drawing.Color.Purple;
+            this.pctBox_PurpleHoldButton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pctBox_PurpleHoldButton.BackgroundImage")));
+            this.pctBox_PurpleHoldButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pctBox_PurpleHoldButton.Location = new System.Drawing.Point(34, 26);
             this.pctBox_PurpleHoldButton.Name = "pctBox_PurpleHoldButton";
             this.pctBox_PurpleHoldButton.Size = new System.Drawing.Size(138, 119);
@@ -114,15 +116,15 @@
             this.pctBox_RedHoldButton.TabStop = false;
             this.pctBox_RedHoldButton.Click += new System.EventHandler(this.pctBox_RedHoldButton_Click);
             // 
-            // button1
+            // btn_WallSubmit
             // 
-            this.button1.Location = new System.Drawing.Point(77, 242);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(89, 31);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Submit ";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.btn_WallSubmit_Click);
+            this.btn_WallSubmit.Location = new System.Drawing.Point(77, 242);
+            this.btn_WallSubmit.Name = "btn_WallSubmit";
+            this.btn_WallSubmit.Size = new System.Drawing.Size(89, 31);
+            this.btn_WallSubmit.TabIndex = 0;
+            this.btn_WallSubmit.Text = "Submit ";
+            this.btn_WallSubmit.UseVisualStyleBackColor = true;
+            this.btn_WallSubmit.Click += new System.EventHandler(this.btn_WallSubmit_Click);
             // 
             // txt_WallWidth
             // 
@@ -163,7 +165,7 @@
             this.pnl_SlideOutWallBuild.Controls.Add(this.lbl_CreateWall);
             this.pnl_SlideOutWallBuild.Controls.Add(this.panel2);
             this.pnl_SlideOutWallBuild.Controls.Add(this.txt_WallHeight);
-            this.pnl_SlideOutWallBuild.Controls.Add(this.button1);
+            this.pnl_SlideOutWallBuild.Controls.Add(this.btn_WallSubmit);
             this.pnl_SlideOutWallBuild.Controls.Add(this.txt_WallWidth);
             this.pnl_SlideOutWallBuild.Controls.Add(this.label1);
             this.pnl_SlideOutWallBuild.Controls.Add(this.label2);
@@ -192,7 +194,6 @@
             this.lbl_CreateWall.Size = new System.Drawing.Size(71, 15);
             this.lbl_CreateWall.TabIndex = 7;
             this.lbl_CreateWall.Text = "Create Wall";
-            this.lbl_CreateWall.Click += new System.EventHandler(this.label3_Click);
             // 
             // panel2
             // 
@@ -213,7 +214,7 @@
             this.btn_saveWall.TabIndex = 0;
             this.btn_saveWall.Text = "Save Wall";
             this.btn_saveWall.UseVisualStyleBackColor = false;
-            this.btn_saveWall.Click += new System.EventHandler(this.btn_WallSubmit_Click);
+            this.btn_saveWall.Click += new System.EventHandler(this.btn_SaveWall_Click);
             // 
             // btn_ReturnHome
             // 
@@ -223,7 +224,7 @@
             this.btn_ReturnHome.TabIndex = 0;
             this.btn_ReturnHome.Text = "Return Home";
             this.btn_ReturnHome.UseVisualStyleBackColor = true;
-            this.btn_ReturnHome.Click += new System.EventHandler(this.btn_WallSubmit_Click);
+            this.btn_ReturnHome.Click += new System.EventHandler(this.btn_ReturnHome_Click);
             // 
             // BuildWallScreen
             // 
@@ -253,7 +254,7 @@
         private System.Windows.Forms.PictureBox pctBox_GreenHoldButton;
         private System.Windows.Forms.PictureBox pctBox_BlueHoldButton;
         private System.Windows.Forms.PictureBox pctBox_RedHoldButton;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btn_WallSubmit;
         private System.Windows.Forms.TextBox txt_WallWidth;
         private System.Windows.Forms.TextBox txt_WallHeight;
         private System.Windows.Forms.Label label1;

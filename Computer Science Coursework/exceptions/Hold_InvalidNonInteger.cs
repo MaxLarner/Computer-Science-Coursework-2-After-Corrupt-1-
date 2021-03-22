@@ -4,12 +4,12 @@ using System.Text;
 
 namespace Computer_Science_Coursework.exceptions
 {
-    public class CreateWall_InvalidTextException : Exception
+    public class Hold_InvalidNonIntegerEntry : Exception
     {
-        public CreateWall_InvalidTextException()
-        
+        public Hold_InvalidNonIntegerEntry()
+
             : base(string.Format("please enter integers only"))
-        { 
+        {
         }
     }
 }

@@ -30,13 +30,13 @@ namespace Computer_Science_Coursework
         {
 
         }
-
+        //Define instances of form 1
         Panel pnl_Screen = Application.OpenForms["Form1"].Controls["pnl_Screen"] as Panel;
 
         private void btn_BuildWall_Click(object sender, EventArgs e)
         {
-            
-            if(!pnl_Screen.Controls.Contains(BuildWallScreen.Instance))
+
+            if (!pnl_Screen.Controls.Contains(BuildWallScreen.Instance))
             {
                 pnl_Screen.Controls.Add(BuildWallScreen.Instance);
                 BuildWallScreen.Instance.Dock = DockStyle.Fill;
@@ -46,6 +46,23 @@ namespace Computer_Science_Coursework
             {
                 BuildWallScreen.Instance.BringToFront();
             }
+        }
+
+        private void btn_SavedWalls_Click(object sender, EventArgs e)
+        {
+            if (!pnl_Screen.Controls.Contains(SelectSavedWallScreen.Instance))
+            {
+                pnl_Screen.Controls.Add(SelectSavedWallScreen.Instance);
+                SelectSavedWallScreen.Instance.Dock = DockStyle.Fill;
+                SelectSavedWallScreen.Instance.BringToFront();
+
+
+            }
+            else
+            { 
+                SelectSavedWallScreen.Instance.BringToFront();
+            }
+
         }
     }
 }

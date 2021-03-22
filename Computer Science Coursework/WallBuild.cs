@@ -6,10 +6,12 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
+using System.IO;
 
 
 namespace Computer_Science_Coursework
 {
+    [Serializable()]
     class WallBuild
     {
 
@@ -24,13 +26,18 @@ namespace Computer_Science_Coursework
         {
             return HoldColour;
         }
+        public string WallFilePath;
+        public bool LoadWall = false;
 
 
         int HoldCount = 0;
-        SaveWall sw = new SaveWall();
+        
+        WallSerializer wallSerializer = new WallSerializer();
         //Defines the wall panel 
         Panel WallPanel = Global.WallPanel;
         PictureBox pctBox_CurrentHold = new PictureBox();
+        //defines the list of holds to pass to save wall 
+        List<Hold> ListOfHolds = new List<Hold>();
 
 
         public void WallPanelSizeTest(int WallWidth, int WallHeight)
@@ -76,19 +83,20 @@ namespace Computer_Science_Coursework
         public void WallPanel_Click(int X, int Y)
         {
 
-            MessageBox.Show("Wall Panel Click event done. The value of the hold colour is: " + HoldColour);
+        
             
             //Creates the name of the new hold 
             string HoldName = "pctBox_Hold" + Convert.ToString(HoldCount);
             //Dectects the X and Y co-ordinates of the click and assigns them to variables
             int xMouseClick = X;
             int yMouseClick = Y;
-            // Creates an instance of the hold class, passing itself, the current instance into the hold.
+            // Creates an instance of the hold class, passing itself, the current instance into the hold, as well as the single instance of SaveWall
             Hold NewHold = new Hold(HoldName, this);
             //assigns the temporary picturebox as the picturebox created via CreateHold()
             pctBox_CurrentHold = NewHold.CreateHold();
-            MessageBox.Show("about to run addhold function");
+           
             NewHold.AddHold(xMouseClick, yMouseClick, pctBox_CurrentHold, WallPanel, HoldCount);
+            ListOfHolds.Add(NewHold);
             
         }
 
@@ -96,22 +104,32 @@ namespace Computer_Science_Coursework
         {
             
             double Value;
+            // if the string entry cannot be parsed into a double value and isn't empty, an error saying that the text entered is not an integer 
+            if (!double.TryParse(WallHeight, out Value) && !string.IsNullOrEmpty(WallHeight))
+            {
+                //resets the entry boxes to show nothing, prompting another user entry 
+                WallWidth = "";
+                WallHeight = "";
+                //exception is thrown to be caught in wallbuild user control
+                throw new CreateWall_InvalidTextException();
+            }
+            else if (!double.TryParse(WallWidth, out Value) && !string.IsNullOrEmpty(WallWidth))
+            {
+                
+                WallWidth = "";
+                WallHeight = "";
+                //exception thrown to be caught in wall build user control
+                throw new CreateWall_InvalidTextException();
+            }
+            else if (string.IsNullOrEmpty(WallHeight))
+            {// exception to be caught in wall builder user control 
+                throw new CreateWall_InvalidPresenceCheck();
+            }
+            else if (string.IsNullOrEmpty(WallWidth))
+            {
+                throw new CreateWall_InvalidPresenceCheck();
+            }
 
-            if (!double.TryParse(WallHeight, out Value))
-            {
-                
-                WallWidth = "";
-                WallHeight = "";
-                throw new CreateWall_InvalidTextException();
-            }
-            else if (!double.TryParse(WallWidth, out Value))
-            {
-                
-                WallWidth = "";
-                WallHeight = "";
-                throw new CreateWall_InvalidTextException();
-            }
-            
         }
         public void CreateWallSizeValidation(string WallHeight, string WallWidth)
         { 
@@ -126,7 +144,7 @@ namespace Computer_Science_Coursework
                
                 WallWidth = "";
                 WallHeight = "";
-                throw new CreateWall_InvalidTextException();
+                throw new CreateWall_InvalidSizeException();
             }
 
             else if (int.Parse(WallHeight) < MinValueHeight || int.Parse(WallWidth) < MinValueWidth)
@@ -143,6 +161,54 @@ namespace Computer_Science_Coursework
 
         //onclick event and paint event for every button... There must be a better way?? investigate using OOP to solve problem
         
+        public void SaveWall()
+        {
+            
+            string value = "";
+            if (InputBox.inputBox("Enter the name of your wall (this will be its file name)", "Save Wall", ref value) == DialogResult.OK)
+            {
+                string WallName = value;
+                 
+                
+                //Finds the file path of the entire project 
+                string ProjectPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
+                // Creates the file in the project file 
+                string FilePath = ProjectPath + @"\" + WallName + ".Climb";
+                MessageBox.Show("here is the file path: " + FilePath);
+                
+                SavedWall Wall = new SavedWall(FilePath, WallPanel.Height, WallPanel.Width);
+                foreach (var Hold in ListOfHolds)
+                {
+                    Wall.AddHolds(Hold.HoldName, Hold.pctBox_CurrentHold.Location, Hold.HoldShape, HoldColour);
+                }
+                wallSerializer.Serialize(Wall, FilePath);
+            }
+            
+        }
+
+        public void Load()
+        {
+            LoadWall = true;
+            SavedWall sw = (SavedWall)wallSerializer.DeSerialize(WallFilePath);
+            CreateWall(sw.WallWidth, sw.WallHeight);
+            AddHoldsFromSave(sw, WallPanel, HoldCount);
+        }
+
+        public void AddHoldsFromSave(SavedWall sw,Panel WallPanel, int HoldCount)
+        {
+            foreach (List<object> hold in sw.ListOfHolds)
+            {
+                //Creates new hold which the saved attributes can be applied to  
+                //uses the fist item in the hold list (the HoldName) as an argument for creating the hold
+                Hold NewHold = new Hold((string)(hold[0]), this);
+                //Creates hold using the colour from save (item 4 in list) as an argument
+                NewHold.CreateAndAddHoldFromSave((Point)hold[1], (Point[])hold[2], (string)hold[3], WallPanel, HoldCount);
+
+
+            }
+
+
+        }
     }
 }
 
