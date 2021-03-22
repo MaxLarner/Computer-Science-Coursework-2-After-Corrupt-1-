@@ -34,14 +34,15 @@ namespace Computer_Science_Coursework
         bool Edited = false;
         Panel WallPanel = Global.WallPanel;
         bool startHold;
-        bool finishHold;
 
+        bool finishHold;
 
 
         // creates a hold object
         public Hold(string Name, WallBuild wb)
 
         {
+
             this.Colour = wb.getColour();
 
             this.startHold = false;
@@ -325,6 +326,38 @@ namespace Computer_Science_Coursework
             catch (Hold_InvalidPresenceCheck)
             {
                 MessageBox.Show("Please enter an integer value");
+
+            }
+
+        }
+
+
+        private void menuSetStart_Click(object sender, EventArgs e)
+        {
+            if  (this.startHold == true)
+            {
+                MessageBox.Show("Start Hold Toggled Off");
+                this.startHold = false; 
+            }
+            else
+            {
+                MessageBox.Show("Start Hold Toggled On ");
+               this.startHold = true;  
+            } 
+        }
+
+        private void menuSetFinish_Click(object sender, EventArgs e)
+        {
+            if (this.finishHold == true)
+            {
+                MessageBox.Show("finish Hold Toggled Off");
+                this.finishHold = false;
+            }
+            else
+            {
+                MessageBox.Show("Start Hold Toggled On ");
+                this.finishHold = true;
+
             }
 
         }
@@ -358,6 +391,7 @@ namespace Computer_Science_Coursework
             }
 
         }
+
 
        
         public Point[] RotateHold(double angleInDegrees)

@@ -40,19 +40,16 @@ namespace Computer_Science_Coursework
             {
                 SelectionScreen.Instance.BringToFront();
             }
-
             
             Controls.Remove(Controls.Find("pnl_ClimbingWall", true)[0]);
         }
 
-       
         public BuildWallScreen()
         {
             InitializeComponent();
          
         }
 
-        
 
 
         //sets wb.set colour to green on button click 
@@ -87,6 +84,7 @@ namespace Computer_Science_Coursework
             CreateWallFromSubmit();
         }
 
+After-Master-Break
         public void CreateWallFromSubmit()
         {
             
@@ -102,7 +100,6 @@ namespace Computer_Science_Coursework
                     //triggers the event handler 
                     wb.CreateWallEventHandler += WallBuild_CreateWallEventHandler;
                     wb.CreateWall(int.Parse(txt_WallWidth.Text), int.Parse(txt_WallHeight.Text));
-
                     wb.WallPanelSizeTest(int.Parse(txt_WallWidth.Text), int.Parse(txt_WallHeight.Text));
 
                 }
@@ -127,13 +124,14 @@ namespace Computer_Science_Coursework
                 }
             }
 
+
         //Checks to see if it is creating a wall from load, and if so, does. 
         public void CreateWallFromLoad()
         {
             
          wb.CreateWallEventHandler += WallBuild_CreateWallEventHandler;
          wb.Load();
-            
+
         }
 
         //Event Handler for adding the control to the wall 
@@ -150,9 +148,11 @@ namespace Computer_Science_Coursework
             wb.WallPanel_Click(e.X, e.Y);
         }
 
+
         private void btn_SaveWall_Click(object sender, EventArgs e)
         {
             wb.SaveWall();
         }
+
     }
 }
