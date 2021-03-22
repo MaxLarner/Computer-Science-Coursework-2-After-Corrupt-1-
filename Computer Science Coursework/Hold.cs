@@ -5,54 +5,78 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
+using System.IO;
+using System.Runtime.Serialization.Json;
 
 namespace Computer_Science_Coursework
 {
+    [Serializable()]
     class Hold
     {
-        InputBox InputBox = new InputBox();
+        //Things previously assigned to picturebox 
+        public string Colour;
+        public string HoldName;
+        int Width;
+        int Height;
+        Point Location;
+        Region HoldRegion;
         WallBuild wb;
-        //instantiates an instance of the class save wall 
-        SaveWall sw = new SaveWall();
+
+        bool FromSave = false;
+        
+        InputBox InputBox = new InputBox();
+        
+       
         //bool PermissionToAddHold;
-        PictureBox pctBox_CurrentHold = new PictureBox();
-        string HoldName;
-        Point[] HoldShape;
+        public PictureBox pctBox_CurrentHold = new PictureBox();
+        
+        public Point[] HoldShape;
         bool Edited = false;
         Panel WallPanel = Global.WallPanel;
         bool startHold;
-        bool finishHold; 
 
-       
-        
+        bool finishHold;
+
+
         // creates a hold object
         public Hold(string Name, WallBuild wb)
+
         {
+
+            this.Colour = wb.getColour();
+
             this.startHold = false;
+
             this.finishHold = false;
+
             this.HoldName = Name;
-            //sets wallbuild wb from line 13 to the wall build instance passed into the constructor
+
+            //sets wallbuild wb from line 13 to the wall build instance passed into the constructor 
+
             this.wb = wb;
+
         }
 
-        
+
         public PictureBox CreateHold()
         {
            
             
             pctBox_CurrentHold.Name = HoldName;
+            this.Width = pctBox_CurrentHold.Width;
+            this.Height = pctBox_CurrentHold.Height;
 
             // deciding colour of hold
             // WallBuild.HoldColour is not setting the HoldColour to the same colour of the button, hence the else if statement was always choosing the purple hold 
-            if (wb.getColour() == "Red")
+            if (Colour == "Red")
             {
                 pctBox_CurrentHold.BackColor = Color.Red;
             }
-            else if (wb.getColour() == "Blue")
+            else if (Colour == "Blue")
             {
                 pctBox_CurrentHold.BackColor = Color.Blue;
             }
-            else if (wb.getColour() == "Green")
+            else if (Colour == "Green")
             {
                 pctBox_CurrentHold.BackColor = Color.Green;
             }
@@ -64,21 +88,58 @@ namespace Computer_Science_Coursework
             return pctBox_CurrentHold;
 
         }
+       
         public void AddHold(int x, int y, PictureBox pctBox_Hold, Panel WallPanel, int HoldCount)
         {
             
 
             //Assigns the location of the picturebox on the wall, position passed in from the WallPanel Click event
-            pctBox_CurrentHold.Location = new Point(x, y);
+            this.Location = new Point(x, y);
+            pctBox_CurrentHold.Location = Location;
             //increases the hold count to make sure the next hold added has a unique name
             HoldCount++;
 
             //Adds the hold to the WallPanel
             WallPanel.Controls.Add(pctBox_Hold);
-            SaveWall SaveWall = new SaveWall();
             pctBox_CurrentHold.Paint += new PaintEventHandler(pctBox_Hold_Paint);
-            MessageBox.Show("pctBox Paint Event Handled");
+            
 
+        }
+
+        public void CreateAndAddHoldFromSave(Point Location, Point[] HoldShape, string Colour, Panel WallPanel, int HoldCount)
+        {
+            FromSave = true;
+            pctBox_CurrentHold.Name = HoldName;
+            this.Width = pctBox_CurrentHold.Width;
+            this.Height = pctBox_CurrentHold.Height;
+
+            // deciding colour of hold
+            // WallBuild.HoldColour is not setting the HoldColour to the same colour of the button, hence the else if statement was always choosing the purple hold 
+            if (Colour == "Red")
+            {
+                pctBox_CurrentHold.BackColor = Color.Red;
+            }
+            else if (Colour == "Blue")
+            {
+                pctBox_CurrentHold.BackColor = Color.Blue;
+            }
+            else if (Colour == "Green")
+            {
+                pctBox_CurrentHold.BackColor = Color.Green;
+            }
+            else //(WallBuild.HoldColour == "Purple")
+            {
+                pctBox_CurrentHold.BackColor = Color.Purple;
+            }
+            HoldDropDownMenu();
+            this.Location = Location;
+            pctBox_CurrentHold.Location = Location;
+            WallPanel.Controls.Add(pctBox_CurrentHold);
+            this.HoldShape = HoldShape;
+            pctBox_CurrentHold.Paint += new PaintEventHandler(pctBox_Hold_Paint);
+            HoldCount++;
+            
+ 
         }
 
         /* public void HoldPlaceValidation()
@@ -181,13 +242,16 @@ namespace Computer_Science_Coursework
         }
         public void pctBox_Hold_Paint(object sender, PaintEventArgs e)
         {
-            
+            if (FromSave == false)
+            {
+                SetHoldShape();
+            }
             GraphicsPath pctBox_CurrentHold_Path = new GraphicsPath();
-            SetHoldShape();
             // Adds the polygon to the graphics path
             pctBox_CurrentHold_Path.AddPolygon(HoldShape);
             //the region of the picturebox is now set to the shape of the graphics path
             pctBox_CurrentHold.Region = new Region(pctBox_CurrentHold_Path);
+            HoldRegion = pctBox_CurrentHold.Region;
             
         }
 
@@ -262,6 +326,38 @@ namespace Computer_Science_Coursework
             catch (Hold_InvalidPresenceCheck)
             {
                 MessageBox.Show("Please enter an integer value");
+
+            }
+
+        }
+
+
+        private void menuSetStart_Click(object sender, EventArgs e)
+        {
+            if  (this.startHold == true)
+            {
+                MessageBox.Show("Start Hold Toggled Off");
+                this.startHold = false; 
+            }
+            else
+            {
+                MessageBox.Show("Start Hold Toggled On ");
+               this.startHold = true;  
+            } 
+        }
+
+        private void menuSetFinish_Click(object sender, EventArgs e)
+        {
+            if (this.finishHold == true)
+            {
+                MessageBox.Show("finish Hold Toggled Off");
+                this.finishHold = false;
+            }
+            else
+            {
+                MessageBox.Show("Start Hold Toggled On ");
+                this.finishHold = true;
+
             }
 
         }
@@ -295,6 +391,7 @@ namespace Computer_Science_Coursework
             }
 
         }
+
 
        
         public Point[] RotateHold(double angleInDegrees)

@@ -61,7 +61,9 @@
   <data name="pctBox_PurpleHoldButton.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing.Common" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAFkAAABNCAYAAADNTMgiAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        wQAADsEBuJFr7QAAAM5JREFUeF7t0DERwCAAwECkIwGltUANdCUM/eH3XMZ61uYskwMmB0wOmBwwOWBy
+
+        vAAADrwBlbxySQAAAM5JREFUeF7t0DERwCAAwECkIwGltUANdCUM/eH3XMZ61uYskwMmB0wOmBwwOWBy
+
         wOSAyQGTAyYHTA6YHDA5YHLA5IDJAZMDJgdMDpgcuDJ5jnnFV0vB5IDJAZMDJgdMDpgcMDlgcsDkgMkB
         kwMmB0wOmBwwOWBywOSAyQGTAyYHTA6YHDA5YHLA5IDJAZMDJgdMDlyZ/DcmB0wOmBwwOWBywOSAyQGT
         AyYHTA6YHDA5YHLA5IDJAZMDJgdMDpgcMDlgcsDkgMkBkwMmH7f2C3tk+k1lMIQmAAAAAElFTkSuQmCC

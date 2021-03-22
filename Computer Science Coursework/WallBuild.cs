@@ -6,12 +6,16 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
+using System.IO;
 
 
 namespace Computer_Science_Coursework
 {
-    class WallBuild
+    [Serializable()]
+    public class WallBuild
     {
+        
+  
 
         public string HoldColour;
 
@@ -24,13 +28,19 @@ namespace Computer_Science_Coursework
         {
             return HoldColour;
         }
+        public string WallFilePath;
+       
 
 
         int HoldCount = 0;
-        SaveWall sw = new SaveWall();
+        
+        
+        WallSerializer wallSerializer = new WallSerializer();
         //Defines the wall panel 
-        Panel WallPanel = Global.WallPanel;
+        public Panel WallPanel = new Panel();
         PictureBox pctBox_CurrentHold = new PictureBox();
+        //defines the list of holds to pass to save wall 
+        List<Hold> ListOfHolds = new List<Hold>();
 
 
         public void WallPanelSizeTest(int WallWidth, int WallHeight)
@@ -65,30 +75,27 @@ namespace Computer_Science_Coursework
         public event EventHandler<CreateWall_AddPanelEventArgs> CreateWallEventHandler;
         private void OnCreateWall(CreateWall_AddPanelEventArgs e)
         {
-            EventHandler<CreateWall_AddPanelEventArgs> handler = CreateWallEventHandler;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            CreateWallEventHandler?.Invoke(this, e);
 
         }
         
         public void WallPanel_Click(int X, int Y)
         {
 
-            MessageBox.Show("Wall Panel Click event done. The value of the hold colour is: " + HoldColour);
+        
             
             //Creates the name of the new hold 
             string HoldName = "pctBox_Hold" + Convert.ToString(HoldCount);
             //Dectects the X and Y co-ordinates of the click and assigns them to variables
             int xMouseClick = X;
             int yMouseClick = Y;
-            // Creates an instance of the hold class, passing itself, the current instance into the hold.
+            // Creates an instance of the hold class, passing itself, the current instance into the hold, as well as the single instance of SaveWall
             Hold NewHold = new Hold(HoldName, this);
             //assigns the temporary picturebox as the picturebox created via CreateHold()
             pctBox_CurrentHold = NewHold.CreateHold();
-            MessageBox.Show("about to run addhold function");
+           
             NewHold.AddHold(xMouseClick, yMouseClick, pctBox_CurrentHold, WallPanel, HoldCount);
+            ListOfHolds.Add(NewHold);
             
         }
 
@@ -153,6 +160,70 @@ namespace Computer_Science_Coursework
 
         //onclick event and paint event for every button... There must be a better way?? investigate using OOP to solve problem
         
+        public void SaveWall()
+        {
+            try 
+            { 
+            string value = "";
+                if (InputBox.inputBox("Save Wall", "Enter the name of your wall (this will be its file name)", ref value) == DialogResult.OK)
+                {
+                    string WallName = value;
+                    //Validates whether the box is empty or not 
+                    if (string.IsNullOrEmpty(WallName))
+                    {
+                        throw new SaveWall_InvalidPresenceCheck();
+
+                    }
+                    else
+                    {
+                        //Finds the file path of the entire project  
+                        string ProjectPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName; 
+                        // Creates the file in the project file  
+                        string FilePath = ProjectPath + @"\" + WallName + ".Climb"; 
+                        MessageBox.Show("here is the file path: " + FilePath); 
+                        SavedWall Wall = new SavedWall(FilePath, WallPanel.Height, WallPanel.Width); 
+                        foreach (var Hold in ListOfHolds) 
+                        {
+                            Wall.AddHolds(Hold.HoldName, Hold.pctBox_CurrentHold.Location, Hold.HoldShape, HoldColour);
+                        } 
+
+                        wallSerializer.Serialize(Wall, FilePath); 
+
+                    } 
+                }
+                        
+                
+            }
+            catch (SaveWall_InvalidPresenceCheck)
+            {
+                MessageBox.Show("Please input a name for your wall");
+            }
+            
+        }
+
+        public void Load()
+        {
+            
+            SavedWall sw = (SavedWall)wallSerializer.DeSerialize(WallFilePath);
+            CreateWall(sw.WallWidth, sw.WallHeight);
+            AddHoldsFromSave(sw, WallPanel, HoldCount);
+        }
+
+        public void AddHoldsFromSave(SavedWall sw, Panel WallPanel, int HoldCount)
+        {
+            foreach (List<object> hold in sw.ListOfHolds)
+            {
+                //Creates new hold which the saved attributes can be applied to  
+                //uses the fist item in the hold list (the HoldName) as an argument for creating the hold
+                Hold NewHold = new Hold((string)(hold[0]), this);
+                //Creates hold using the colour from save (item 4 in list) as an argument
+                NewHold.CreateAndAddHoldFromSave((Point)hold[1], (Point[])hold[2], (string)hold[3], WallPanel, HoldCount);
+
+
+            }
+
+
+        }
     }
 }
 

@@ -61,6 +61,7 @@
             this.btn_SavedWalls.TabIndex = 0;
             this.btn_SavedWalls.Text = "SAVED WALLS";
             this.btn_SavedWalls.UseVisualStyleBackColor = true;
+            this.btn_SavedWalls.Click += new System.EventHandler(this.btn_SavedWalls_Click);
             // 
             // SelectionScreen
             // 

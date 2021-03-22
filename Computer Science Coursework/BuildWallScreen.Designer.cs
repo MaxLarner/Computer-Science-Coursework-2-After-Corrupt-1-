@@ -214,7 +214,7 @@
             this.btn_saveWall.TabIndex = 0;
             this.btn_saveWall.Text = "Save Wall";
             this.btn_saveWall.UseVisualStyleBackColor = false;
-            this.btn_saveWall.Click += new System.EventHandler(this.btn_WallSubmit_Click);
+            this.btn_saveWall.Click += new System.EventHandler(this.btn_SaveWall_Click);
             // 
             // btn_ReturnHome
             // 
