@@ -24,7 +24,7 @@ namespace Computer_Science_Coursework
             this.WallWidth = WallWidth; 
 
         }
-      // adds all the crucial inforation to a list, then adds that to the list of holds 
+        // adds all the crucial inforation to a list, then adds that to the list of holds 
         public void AddHolds(string HoldName, Point pctBox_Location, Point[] HoldShape, string HoldColour)
         {
             List<object> Hold = new List<object>();

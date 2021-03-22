@@ -12,9 +12,9 @@ namespace Computer_Science_Coursework
 {
     public partial class BuildWallScreen : UserControl
     {
-        WallBuild wb = new WallBuild();
-         
-
+        //Creates an instance of wall build and selectSavedWall, this can be the 
+        public WallBuild wb = new WallBuild();
+        
         public static BuildWallScreen _instance;
         public static BuildWallScreen Instance
         {
@@ -41,13 +41,15 @@ namespace Computer_Science_Coursework
                 SelectionScreen.Instance.BringToFront();
             }
 
+            
+            Controls.Remove(Controls.Find("pnl_ClimbingWall", true)[0]);
         }
 
        
         public BuildWallScreen()
         {
             InitializeComponent();
-
+         
         }
 
         
@@ -82,41 +84,56 @@ namespace Computer_Science_Coursework
 
         private void btn_WallSubmit_Click(object sender, EventArgs e)
         {
-            string WallWidth = txt_WallWidth.Text;
-            string WallHeight = txt_WallHeight.Text;
+            CreateWallFromSubmit();
+        }
 
-            try
-            {
-                
-                //Validates the input using functions from instantiated Wallbuild
-                wb.CreateWallTextValidation(WallHeight, WallWidth);
-                wb.CreateWallSizeValidation(txt_WallHeight.Text, txt_WallWidth.Text);
-                //triggers the event handler 
-                wb.CreateWallEventHandler += WallBuild_CreateWallEventHandler;
-                wb.CreateWall(int.Parse(txt_WallWidth.Text), int.Parse(txt_WallHeight.Text));
+        public void CreateWallFromSubmit()
+        {
+            
+                string WallWidth = txt_WallWidth.Text;
+                string WallHeight = txt_WallHeight.Text;
 
-                wb.WallPanelSizeTest(int.Parse(txt_WallWidth.Text), int.Parse(txt_WallHeight.Text));
+                try
+                {
 
-            }
-            //Catches errors thrown up from the validation functions in wall build
-            catch (CreateWall_InvalidTextException)
-            {
-                MessageBox.Show("data entered is not a valid , please try again");
+                    //Validates the input using functions from instantiated Wallbuild
+                    wb.CreateWallTextValidation(WallHeight, WallWidth);
+                    wb.CreateWallSizeValidation(txt_WallHeight.Text, txt_WallWidth.Text);
+                    //triggers the event handler 
+                    wb.CreateWallEventHandler += WallBuild_CreateWallEventHandler;
+                    wb.CreateWall(int.Parse(txt_WallWidth.Text), int.Parse(txt_WallHeight.Text));
+
+                    wb.WallPanelSizeTest(int.Parse(txt_WallWidth.Text), int.Parse(txt_WallHeight.Text));
+
+                }
+                //Catches errors thrown up from the validation functions in wall build
+                catch (CreateWall_InvalidTextException)
+                {
+                    MessageBox.Show("data entered is not a valid , please try again");
+                }
+
+                catch (CreateWall_InvalidSizeException)
+                {
+                    MessageBox.Show("This wall size is out of bounds. Make sure it's more than 1.5m Wide and 3m tall, but less than 4m wide and 7m Tall");
+                }
+
+                catch (CreateWall_PanelTest)
+                {
+                    MessageBox.Show("there was an error when creating the wall panel");
+                }
+                catch (CreateWall_InvalidPresenceCheck)
+                {
+                    MessageBox.Show("Not all fields have been filled. Please enter a height and width (cm)");
+                }
             }
 
-            catch (CreateWall_InvalidSizeException)
-            {
-                MessageBox.Show("This wall size is out of bounds. Make sure it's more than 1.5m Wide and 3m tall, but less than 4m wide and 7m Tall");
-            }
-
-            catch (CreateWall_PanelTest)
-            {
-                MessageBox.Show("there was an error when creating the wall panel");
-            }
-            catch(CreateWall_InvalidPresenceCheck)
-            {
-                MessageBox.Show("Not all fields have been filled. Please enter a height and width (cm)");
-            }
+        //Checks to see if it is creating a wall from load, and if so, does. 
+        public void CreateWallFromLoad()
+        {
+            
+         wb.CreateWallEventHandler += WallBuild_CreateWallEventHandler;
+         wb.Load();
+            
         }
 
         //Event Handler for adding the control to the wall 
@@ -137,7 +154,5 @@ namespace Computer_Science_Coursework
         {
             wb.SaveWall();
         }
-
-        
     }
 }

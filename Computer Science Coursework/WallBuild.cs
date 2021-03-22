@@ -12,8 +12,10 @@ using System.IO;
 namespace Computer_Science_Coursework
 {
     [Serializable()]
-    class WallBuild
+    public class WallBuild
     {
+        
+  
 
         public string HoldColour;
 
@@ -27,14 +29,15 @@ namespace Computer_Science_Coursework
             return HoldColour;
         }
         public string WallFilePath;
-        public bool LoadWall = false;
+       
 
 
         int HoldCount = 0;
         
+        
         WallSerializer wallSerializer = new WallSerializer();
         //Defines the wall panel 
-        Panel WallPanel = Global.WallPanel;
+        public Panel WallPanel = new Panel();
         PictureBox pctBox_CurrentHold = new PictureBox();
         //defines the list of holds to pass to save wall 
         List<Hold> ListOfHolds = new List<Hold>();
@@ -72,11 +75,7 @@ namespace Computer_Science_Coursework
         public event EventHandler<CreateWall_AddPanelEventArgs> CreateWallEventHandler;
         private void OnCreateWall(CreateWall_AddPanelEventArgs e)
         {
-            EventHandler<CreateWall_AddPanelEventArgs> handler = CreateWallEventHandler;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            CreateWallEventHandler?.Invoke(this, e);
 
         }
         
@@ -163,38 +162,54 @@ namespace Computer_Science_Coursework
         
         public void SaveWall()
         {
-            
+            try 
+            { 
             string value = "";
-            if (InputBox.inputBox("Enter the name of your wall (this will be its file name)", "Save Wall", ref value) == DialogResult.OK)
-            {
-                string WallName = value;
-                 
-                
-                //Finds the file path of the entire project 
-                string ProjectPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
-                // Creates the file in the project file 
-                string FilePath = ProjectPath + @"\" + WallName + ".Climb";
-                MessageBox.Show("here is the file path: " + FilePath);
-                
-                SavedWall Wall = new SavedWall(FilePath, WallPanel.Height, WallPanel.Width);
-                foreach (var Hold in ListOfHolds)
+                if (InputBox.inputBox("Save Wall", "Enter the name of your wall (this will be its file name)", ref value) == DialogResult.OK)
                 {
-                    Wall.AddHolds(Hold.HoldName, Hold.pctBox_CurrentHold.Location, Hold.HoldShape, HoldColour);
+                    string WallName = value;
+                    //Validates whether the box is empty or not 
+                    if (string.IsNullOrEmpty(WallName))
+                    {
+                        throw new SaveWall_InvalidPresenceCheck();
+
+                    }
+                    else
+                    {
+                        //Finds the file path of the entire project  
+                        string ProjectPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName; 
+                        // Creates the file in the project file  
+                        string FilePath = ProjectPath + @"\" + WallName + ".Climb"; 
+                        MessageBox.Show("here is the file path: " + FilePath); 
+                        SavedWall Wall = new SavedWall(FilePath, WallPanel.Height, WallPanel.Width); 
+                        foreach (var Hold in ListOfHolds) 
+                        {
+                            Wall.AddHolds(Hold.HoldName, Hold.pctBox_CurrentHold.Location, Hold.HoldShape, HoldColour);
+                        } 
+
+                        wallSerializer.Serialize(Wall, FilePath); 
+
+                    } 
                 }
-                wallSerializer.Serialize(Wall, FilePath);
+                        
+                
+            }
+            catch (SaveWall_InvalidPresenceCheck)
+            {
+                MessageBox.Show("Please input a name for your wall");
             }
             
         }
 
         public void Load()
         {
-            LoadWall = true;
+            
             SavedWall sw = (SavedWall)wallSerializer.DeSerialize(WallFilePath);
             CreateWall(sw.WallWidth, sw.WallHeight);
             AddHoldsFromSave(sw, WallPanel, HoldCount);
         }
 
-        public void AddHoldsFromSave(SavedWall sw,Panel WallPanel, int HoldCount)
+        public void AddHoldsFromSave(SavedWall sw, Panel WallPanel, int HoldCount)
         {
             foreach (List<object> hold in sw.ListOfHolds)
             {

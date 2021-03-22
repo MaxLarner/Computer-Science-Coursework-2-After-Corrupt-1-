@@ -137,7 +137,8 @@ namespace Computer_Science_Coursework
             this.HoldShape = HoldShape;
             pctBox_CurrentHold.Paint += new PaintEventHandler(pctBox_Hold_Paint);
             HoldCount++;
-
+            
+ 
         }
 
         /* public void HoldPlaceValidation()

@@ -8,12 +8,14 @@ namespace Computer_Science_Coursework
 {
     class SelectSavedWall
     {
+       
         string ProjectFilePath = @"C:\Users\max larner\source\repos\Computer-Science-Coursework-2-After-Corrupt-1-\Computer Science Coursework\bin";
         string WallFilePath;
         
         string SelectedWallName;
         WallSerializer Serializer = new WallSerializer();
-        WallBuild wb = new WallBuild();
+        
+       
 
 
         public void LoadWallFiles(ListView lstView_FileSelection)
@@ -43,7 +45,11 @@ namespace Computer_Science_Coursework
 
         public void WallSelect()
         {
-            wb.WallFilePath = WallFilePath;
+            //makes changes to the instance of wall build in the BuildWallScreen
+            BuildWallScreen.Instance.wb.WallFilePath = WallFilePath;
+            //Tells buildwall to create a wall from load when it switches to the new usercontrol
+            BuildWallScreen.Instance.CreateWallFromLoad();
+            
             
         }
     }

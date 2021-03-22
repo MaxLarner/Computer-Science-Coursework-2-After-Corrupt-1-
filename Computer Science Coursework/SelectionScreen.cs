@@ -28,7 +28,7 @@ namespace Computer_Science_Coursework
         }
         private void SelectionScreen_Load(object sender, EventArgs e)
         {
-
+       
         }
         //Define instances of form 1
         Panel pnl_Screen = Application.OpenForms["Form1"].Controls["pnl_Screen"] as Panel;
@@ -45,6 +45,7 @@ namespace Computer_Science_Coursework
             else
             {
                 BuildWallScreen.Instance.BringToFront();
+
             }
         }
 
